@@ -1,0 +1,77 @@
+# tp1_ej1.sh
+# TRABAJO PRACTICO 1
+# EJERCICIO 1
+# *Alumnos*
+# 
+#
+#
+#
+#
+#
+#
+#
+
+
+#!/bin/bash
+ErrorS()
+{
+    echo "Error. La sintaxis del script es la siguiente:"
+    echo "Si desea saber la cantidad de lineas del fichero: $0 nombre_archivo L" # COMPLETAR
+    echo "Si desea saber la cantidad de bytes del fichero: $0 nombre_archivo C" # COMPLETAR
+    echo "Si desea saber la longitud de la linea mas larga: $0 nombre_archivo M" # COMPLETAR
+}
+
+ErrorP()
+{
+    echo "Error. nombre_archivo no existe o no se pudo leer" # COMPLETAR
+}
+
+if test $# -lt 2; then
+    ErrorS
+fi
+if ! test -r $1; then
+    ErrorP
+elif test -f $1 && (test $2 = "L" || test $2 = "C" || test $2 = "M"); then
+  if test $2 = "L"; then
+    res=`wc -l $1`
+    echo "La cantidad de lineas del fichero es: $res" # COMPLETAR
+  elif test $2 = "C"; then
+    res=`wc -m $1`
+    echo "La cantidad de bytes del fichero es: $res" #COMPLETAR
+  elif test $2 = "M"; then
+    res=`wc -L $1`
+    echo "La longitud de la linea más larga es: $res" #COMPLETAR
+  fi
+else
+  ErrorS
+fi
+
+#fin de archivo
+
+#                   ***Respuestas***
+# a) El objetivo de este script es mostrar por pantalla información de un   
+#    fichero que el usuario solicite consultar. Para este caso, puede solicitar  
+#   3 cosas: 1- La cantidad de lineas del documento.
+#            2- La cantidad de bytes del documento.
+#            3- La longitud de la linea más larga.
+#    Si se le ingresa mas de 2 parametros solo devuelve la primer consulta.
+#
+# b) Recibe 2 parámetros: El nombre del fichero y una letra mayúscula.
+# c) y d) Ver el código.
+# e) La variable "$#" brinda la información de la cantidad de parámetros que
+#    se pasan del script al shell. ---Falta variables similares---
+# f) En Shell Scripts tenemos 3 tipos de comillas (simple, doble, acento grave).
+#    Las comillas simples interpretan el contenido de forma literal. PorEj:
+#    SALUDO='Hola $USER, qué tal?' no mostraría el contenido de $USER al 
+#    utilizar echo $SALUDO, sino que imprimiría "Hola $USER, qué tal?".
+#    Las comillas dobles sì interpreta las referencias a variables, poniendo
+#    en su lugar su contenido. Por Ej:
+#    echo "tu directorio de trabajo es $HOME" imprimirìa "tu directorio de 
+#    trabajo es /home/user"
+#    El acento grave se utiliza para ejecutar una orden y luego con eso se 
+#    puede asignar a una variable y tratarla. PorEj:
+#    DIR=`pwd` voy a poder almacenar en DIR el directorio actual.
+#
+#
+
+
