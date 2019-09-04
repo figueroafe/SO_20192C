@@ -3,7 +3,6 @@
 if test $# -eq 0 ; #Si no envio parametro toma la direccion actual
 then
 direc=$(pwd);
-echo "Voy a trabajar en la direccion: $direc"
 elif [ $1 = "-h" ] ; then #Si el parametro enviado es consulta de ayuda muestro informacion
 echo "Voy a mostrar ayuda"
 #SALIR
