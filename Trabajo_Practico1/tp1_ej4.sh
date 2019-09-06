@@ -43,7 +43,21 @@ elif ! test -d $1; then
 echo "imposible continuar, el directorio no existe..."
 else
 echo "es un directorio correcto"
-find "$1" -name "*.$2"
- 
+lcodigo=0
+lcomentarios=0
+cantFicheros=0
+ltotales=0
+find "$1" -name "*.$2" > resultados #aca almaceno la ruta a los archivos
+# leo el archivo y mientras no se de fin de archivo
+# ejecuto un awk para el fichero leido en la linea 
+# ese awk tendra que ir acumulando en una variable "crearla aca"
+# rm eliminar  
+echo "Sobre la cantidad de ficheros: $cantFicheros se obtuvo:"
+echo "    Total de Lineas de Codigo: $lcodigo "
+#echo "  Porcentaje de lineas Codigo: (($lcodigo / $ltotales)) "
+echo "      Total lineas comentadas: $lcomentarios "
+#echo " Porcentaje lineas comentadas: (($lcomentarios / $ltotales))"
+echo
+rm resultados
 fi
 
