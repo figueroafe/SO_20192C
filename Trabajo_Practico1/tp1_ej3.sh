@@ -6,6 +6,7 @@ destino=/home/francisco/bkps
 ORIGEN=/home/francisco/aws
 D=`date +%Y-%m-%d-%T`
 LOCK="/tmp/bkp.lock"
+trap 'rm -f $LOCK' INT
 #echo "##########################################################################"
 #echo "--------------------------------------------------------------------------"
 #echo "########### TRABAJO PRACTICO N°1 #########################################"
@@ -52,10 +53,13 @@ case $var in
 			exit 1
 		fi
 
-		while true 
+
+		echo "Preciones Ctrl+C para interrumpir."
+		while [ -f $LOCK ] 
 		do
 			hh=`date +%Y-%m-%d-%T`
-			tar -czf $dest/bkp_$hh.tar.gz $orig &
+			tar -czf $dest/bkp_$hh.tar.gz $orig 
+			echo "Backup realizado."
 			sleep $slp
 		done
 		;;
