@@ -5,7 +5,7 @@ var=$1
 destino=/home/francisco/bkps
 ORIGEN=/home/francisco/aws
 D=`date +%Y-%m-%d-%T`
-
+LOCK="/tmp/bkp.lock"
 #echo "##########################################################################"
 #echo "--------------------------------------------------------------------------"
 #echo "########### TRABAJO PRACTICO N°1 #########################################"
@@ -36,16 +36,26 @@ D=`date +%Y-%m-%d-%T`
 
 case $var in
 	start )
-		echo "Ingrese origen"
-		read orig
-		echo "Ingrese destino"
-		read dest
-		echo "Sleep"
-		read slp
+		if [ ! -e $LOCK ]
+		then
+			trap "rm -f $LOCK; exit" INT TERM EXIT
+			touch $LOCK
+			echo "Ingrese directorio origen"
+			read orig
+			echo "Ingrese directorio destino"
+			read dest
+			echo "Sleep"
+			read slp
+			trap - INT TERM EXIT
+		else
+			echo "Ya se está ejecutando el demonio de backups."
+			exit 1
+		fi
+
 		while true 
 		do
 			hh=`date +%Y-%m-%d-%T`
-			tar -czf $dest/bkp_$hh.tar.gz $orig
+			tar -czf $dest/bkp_$hh.tar.gz $orig &
 			sleep $slp
 		done
 		;;
