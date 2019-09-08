@@ -5,8 +5,9 @@ var=$1
 destino=/home/francisco/bkps
 ORIGEN=/home/francisco/aws
 D=`date +%Y-%m-%d-%T`
-LOCK="/tmp/bkp.lock"
+LOCK="/var/lock/bkp.lock"
 trap 'rm -f $LOCK' INT
+
 #echo "##########################################################################"
 #echo "--------------------------------------------------------------------------"
 #echo "########### TRABAJO PRACTICO N°1 #########################################"
@@ -29,11 +30,27 @@ trap 'rm -f $LOCK' INT
 #echo "																		    "
 #echo "																		    "
 #echo "																		    "
-#
-#funcion_error()
-#{
-#	ERROR="Opcion Invalida"
-#}
+
+funcion_error()
+{
+	ERROR="Opcion Invalida"
+}
+
+funcion_backup()
+{
+		while [ -f $LOCK ] 
+		do
+			hh=`date +%Y-%m-%d-%T`
+			tar -czf $dest/bkp_$hh.tar.gz $orig 
+			echo "Backup realizado."
+			sleep $slp
+		done
+}
+
+detener_demonio()
+{
+	cat /tmp/bkp.pid | awk '{print "kill -9 "$1}'|sh
+}
 
 case $var in
 	start )
@@ -55,16 +72,18 @@ case $var in
 
 
 		echo "Preciones Ctrl+C para interrumpir."
-		while [ -f $LOCK ] 
-		do
-			hh=`date +%Y-%m-%d-%T`
-			tar -czf $dest/bkp_$hh.tar.gz $orig 
-			echo "Backup realizado."
-			sleep $slp
-		done
+		setsid funcion_backup >/tmp/bkp.pid 2>$1 < /dev/null &
+		#while [ -f $LOCK ] 
+		#do
+		#	hh=`date +%Y-%m-%d-%T`
+		#	tar -czf $dest/bkp_$hh.tar.gz $orig 
+		#	echo "Backup realizado."
+		#	sleep $slp
+		#done
 		;;
 	stop )
-		echo "mata el demonio."
+		echo "Se detiene el demonio de backup."
+		detener_demonio
 		;;
 	count )
 		ls -1tr $destino | wc -l
