@@ -19,13 +19,14 @@ if [ -d "$direc" ] ; then
 echo "Voy a trabajar en la direccion: $direc"
 
 cd $direc
-echo "Archivos que voy a evaluar:"
-find . -depth -name '* *'  
-while IFS= read -r f ; 
-do 
-echo "=$f="
-#mv -i "$f" "$(dirname "$f")/$(basename "$f"|tr 'v' _)"; 
+echo "Archivo:"
+find . -type f -name '* *'  | while IFS=" " read -r FILE
+do
+echo "$FILE"
+mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )";
+echo "Se renombro"
 done
 fi
+
 
 
