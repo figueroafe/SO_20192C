@@ -31,21 +31,21 @@ trap 'rm -f $LOCK' INT
 #echo "																		    "
 #echo "																		    "
 
-funcion_error()
-{
-	ERROR="Opcion Invalida"
-}
-
-funcion_backup()
-{
-		while [ -f $LOCK ] 
-		do
-			hh=`date +%Y-%m-%d-%T`
-			tar -czf $dest/bkp_$hh.tar.gz $orig 
-			echo "Backup realizado."
-			sleep $slp
-		done
-}
+#funcion_error()
+#{
+#	ERROR="Opcion Invalida"
+#}
+#
+#funcion_backup()
+#{
+#		while [ -f $LOCK ] 
+#		do
+#			hh=`date +%Y-%m-%d-%T`
+#			tar -czf $dest/bkp_$hh.tar.gz $orig 
+#			echo "Backup realizado."
+#			sleep $slp
+#		done
+#}
 
 detener_demonio()
 {
@@ -72,17 +72,18 @@ case $var in
 
 
 		echo "Preciones Ctrl+C para interrumpir."
-		setsid funcion_backup >/tmp/bkp.pid 2>$1 < /dev/null &
-		#while [ -f $LOCK ] 
-		#do
-		#	hh=`date +%Y-%m-%d-%T`
-		#	tar -czf $dest/bkp_$hh.tar.gz $orig 
-		#	echo "Backup realizado."
-		#	sleep $slp
-		#done
+		#setsid funcion_backup >/tmp/bkp.pid 2>$1 < /dev/null &
+		while [ -f $LOCK ] 
+		do
+			hh=`date +%Y-%m-%d-%T`
+			tar -czf $dest/bkp_$hh.tar.gz $orig 
+			echo "Backup realizado."
+			sleep $slp 
+		done
 		;;
 	stop )
-		echo "Se detiene el demonio de backup."
+		echo "Se detiene el demonio de backup."+
+		rm -f $LOCK
 		detener_demonio
 		;;
 	count )
