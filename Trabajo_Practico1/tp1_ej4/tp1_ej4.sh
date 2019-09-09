@@ -40,30 +40,33 @@ else
 	echo
 	echo "Procesando...."
 	echo 
-	find "$1" -name "*.$2" > resultados #aca almaceno la ruta a los archivos
+	find "$1" -name "*.$2" > Resultados #aca almaceno la ruta a los archivos
 	lcodigo=0
 	lcomentarios=0
-	cantFicheros=`wc -l resultados`
+	cantFicheros=`wc -l Resultados`
 	ltotales=0
 
 	while IFS= read -r line
 	do
 		awk -f codigo.awk $line;
-		lcodigo=`cat cod.txt`
-		lcomentarios=`cat com.txt`
+		lcodigo=$(( lcodigo+`cat cod.txt` ))
+		lcomentarios=$(( lcomentarios+`cat com.txt` ))
 		ltotales=$(( ltotales+`cat lineas.txt` ))
-	done < resultados
+	done < Resultados
 
 
-	lporCom=$(( (lcomentarios/ltotales) ))
-	lporCod=$(( (lcodigo/ltotales) ))
-	echo "Sobre la cantidad de ficheros: $cantFicheros se obtuvo:"
-	echo "    Total de Lineas de Codigo: $lcodigo "
-	echo "  Porcentaje de lineas Codigo: $lporCod %"
+	lporCom=$(echo "scale = 2; $lcomentarios/$ltotales" | bc)
+	lporCod=$(echo "scale = 2; $lcodigo/$ltotales" | bc)
+	echo "Sobre la cantidad de ficheros: $cantFicheros "
+    echo "Se obtuvo:"
+    echo "== ======"
+    echo "              Total de Lineas: $ltotales"
+	echo "    Total de Lineas de Codigo: $lcodigo"
+	echo "  Porcentaje de lineas Codigo: $lporCod%"
 	echo "      Total lineas comentadas: $lcomentarios"
-	echo " Porcentaje lineas comentadas: $lporCom %"
+	echo " Porcentaje lineas comentadas: $lporCom%"
 	echo
-	rm resultados
+	rm Resultados
 	rm cod.txt
 	rm com.txt
 	rm lineas.txt
