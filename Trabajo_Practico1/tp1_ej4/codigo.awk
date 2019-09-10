@@ -1,21 +1,21 @@
 BEGIN{ 
 	 comentarios = 0;
 	 codigo = 0;
-	 senal = 0;
 	 lineas = 0;
-	 reg = "//*"
 }
 { 
-
-		if($0 ~ reg){
-			comentarios++;
-			senal = 1;
-		}
-		if(senal == 0){
-			codigo++;
-		}
-			senal = 0;
-			lineas++;
+      
+    if(t = index($0, "//")){
+        if(t == 1){
+        comentarios++;}
+        else{
+        comentarios++;
+        codigo++;}
+    }
+    else
+    codigo++;
+    
+    lineas++;
 }	
 END{
 print comentarios > "com.txt";
