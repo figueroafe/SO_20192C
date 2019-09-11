@@ -55,8 +55,8 @@ else
 	done < Resultados
 
 
-	lporCom=$(echo "scale = 2; $lcomentarios/$ltotales" | bc)
-	lporCod=$(echo "scale = 2; $lcodigo/$ltotales" | bc)
+	lporCom=$(echo "scale = 2; $lcomentarios*100/$ltotales" | bc)
+	lporCod=$(echo "scale = 2; $lcodigo*100/$ltotales" | bc)
 	echo "Sobre la cantidad de ficheros: $cantFicheros "
     echo "Se obtuvo:"
     echo "== ======"
