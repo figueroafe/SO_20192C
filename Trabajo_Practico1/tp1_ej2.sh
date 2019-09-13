@@ -1,4 +1,6 @@
 #!/bin/bash
+
+
 help()
 {
     echo
@@ -76,8 +78,9 @@ else
 fi 
 
 echo "Voy a trabajar en el directorio: $direc"
-cd $direc 
-cant=0
+cd $direc; 
+cant=0;
+#cant=$((cant+=1));
 if [[ $recur -eq 1 ]] ; then
     find . -type f -name '* *'  | while IFS=" " read -r FILE
     do 
@@ -85,14 +88,14 @@ if [[ $recur -eq 1 ]] ; then
         echo "$FILE"
         if [[ -f "$(basename "$FILE"|tr -s [:space:] _ )" ]] 
         then
-            echo "Este fichero ya existe, se renombrara con -copy"
+            echo "El renombre de este fichero ya existe, se renombrara con  '-copy'"
             mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )-copy";
-            echo "Se renombro con exito" 
-            cant=$((cant + 1))
+            echo "Este fichero se renombro con exito" ;
+            cant=$((cant+=1));
         else
             mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )"; 
-            echo "Se renombro con exito"
-            cant=$((cant + 1))
+            cant=$((cant+=1));            
+            echo "Este fichero se renombro con exito";
         fi
     done
 else
@@ -102,16 +105,18 @@ else
         echo "$FILE"
         if [[ -f "$(basename "$FILE"|tr -s [:space:] _ )" ]] 
         then
-            echo "Este fichero ya existe, se renombrara con -copy"
+            echo "El renombre de este fichero ya existe, se renombrara con  '-copy'"
             mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )-copy";
-            echo "Se renombro con exito" 
-            cant=$((cant + 1))
+            echo "Este fichero se renombro con exito" 
         else
             mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )"; 
-            echo "Se renombro con exito"
-            cant=$((cant + 1))
+            echo "Este fichero se renombro con exito";
         fi
+            echo "$cant";
+            cant=$((cant+=1));
+            echo "$cant";
     done
 fi
-echo "cantidad de archivos renombrados: $cant"
+echo "cantidad de archivos renombrados:";
+echo "$cant";
 
