@@ -81,13 +81,21 @@ if test $# -eq 1; then #para 1 parametro
 	elif test "$1" = "-l"; then #si es el parametro "-l"
 		
 		if [ `ls ~/.papelera/ | wc -l` -ne 0 ]; then #verifica si la cantidad de ficheros que tiene la papelera no es cero
-			archivos=`ls ~/.papelera -1 -c`
+	
 			echo ""
-			echo "	Archivos de la papelera"
-			echo "	======================="
-			echo "Nombre"
-			echo "------"
-			echo "$archivos"
+			awk -F/ 'BEGIN{
+					printf "\t\t\tArchivos de la papelera\n"
+					printf "======================================================================\n"
+					printf "Nombre del archivo\t\t\tUbicacion original\n"
+					printf "------------------\t\t\t------------------------------\n"
+					}
+					
+					{if ($NF !~ /^$/)
+					{nombre=substr($NF, 1, length($NF)-1);
+					ruta=substr($0, 1, index($0, $NF)-1);
+					printf ""nombre"\t\t\t"ruta"\n";
+					}
+				}' ~/.papelera/.rutas.txt
 			echo ""
 		else	
 			PapeleraVacia
@@ -117,29 +125,29 @@ if test $# -eq 1; then #para 1 parametro
 elif test "$1" = "-r"; then #sino tiene un parametro, hay 2 que deben ser -r y el nombre del archivo con su extensión
 	if [ `ls ~/.papelera/ | wc -l` -ne 0 ]; then #verifica si la cantidad de ficheros que tiene la papelera no es cero	
 		echo "" > ~/.papelera/.norestaurar.txt
-		awk -F/ -v archivo=$2	'BEGIN{
-									cont=0;
-								}
+		awk -F/ -v archivo="$2"	'BEGIN{
+					cont=0;
+					}
 								
-								{
-								expresion="^"archivo"[0-9]";
-								if ($NF ~ expresion)
-									{nombreSinNro=substr($0, 1, length($0)-1);
-									system("mv ~/.papelera/"$NF" "nombreSinNro" ");
-									cont++;
-								}
-								else
-									system("echo "$0" >> ~/.papelera/.norestaurar.txt");
-								}
+					{
+					expresion="^"archivo"[0-9]";
+					if ($NF ~ expresion)
+						{nombreSinNro=substr($0, 1, length($0)-1);
+						system("mv ~/.papelera/"$NF" "nombreSinNro" ");
+						cont++;
+						}
+					else
+						system("echo "$0" >> ~/.papelera/.norestaurar.txt");
+					}
 		
-								END{
-									if(cont == 0)
-										printf "\nNo se encontro ningún archivo en la papelera que coincida con la búsqueda. Debe indicar el nombre del archivo y la extensión, intente de nuevo\n\n";
-									else
-										{printf "\nEl/los archivo/s se ha/n restaurado a su ubicación original\n\n";
-										system("mv ~/.papelera/.norestaurar.txt ~/.papelera/.rutas.txt");
-										}
-								}' ~/.papelera/.rutas.txt
+					END{
+						if(cont == 0)
+							printf "\nNo se encontro ningún archivo en la papelera que coincida con la búsqueda. Debe indicar el nombre del archivo y la extensión, intente de nuevo\n\n";
+						else
+						{printf "\nEl/los archivo/s se ha/n restaurado a su ubicación original\n\n";
+							system("mv ~/.papelera/.norestaurar.txt ~/.papelera/.rutas.txt");
+						}
+					}' ~/.papelera/.rutas.txt
 	else
 		PapeleraVacia
 	fi
