@@ -1,21 +1,35 @@
 BEGIN{ 
 	 comentarios = 0;
 	 codigo = 0;
-	 senal = 0;
+	 nrolinea = 1;
 	 lineas = 0;
-	 reg = "//*"
 }
 { 
+   if(index($0, "/*")){
+	  inicom = 1;
+	  fincom = index($0, "*/")
+		while(! fincom){
+		 inicom++;
+		 lineas++;
+		 getline;
+		 fincom = index($0, "*/")
+		}
+	   comentarios+=inicom;
+	}
+	else
+	{
+	if(t = index($0, "//")){
+		    if(t == 1){
+		    comentarios++;}
+		    else{
+		    comentarios++;
+		    codigo++;}
+		}
+		else
+		codigo++;
 
-		if($0 ~ reg){
-			comentarios++;
-			senal = 1;
-		}
-		if(senal == 0){
-			codigo++;
-		}
-			senal = 0;
-			lineas++;
+    	lineas++;
+	}  
 }	
 END{
 print comentarios > "com.txt";

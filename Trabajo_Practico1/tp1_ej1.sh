@@ -13,34 +13,34 @@
 
 
 #!/bin/bash
-ErrorS()
+ErrorS() #Funcion para mostrar por la terminal que hay un error de sintaxis
 {
     echo "Error. La sintaxis del script es la siguiente:"
-    echo "Si desea saber la cantidad de lineas del fichero: $0 nombre_archivo L" #Llega por no tener los parametros suficientes o porque el segundo parametro no es una letra valida.
-    echo "Si desea saber la cantidad de bytes del fichero: $0 nombre_archivo C" #Llega por no tener los parametros suficientes o porque el segundo parametro no es una letra valida.
-    echo "Si desea saber la longitud de la linea mas larga: $0 nombre_archivo M" #Llega por no tener los parametros suficientes o porque el segundo parametro no es una letra valida.
+    echo "Si desea saber la cantidad de lineas del fichero: $0 nombre_archivo L" #COMPLETAR
+    echo "Si desea saber la cantidad de bytes del fichero: $0 nombre_archivo C" #COMPLETAR
+    echo "Si desea saber la longitud de la linea mas larga: $0 nombre_archivo M" #COMPLETAR
 }
 
-ErrorP()
+ErrorP() #Funcion para mostrar por la terminal que no tiene permisos de lectura el fichero o no existe.
 {
-    echo "Error. nombre_archivo no existe o no se pudo leer" #Informa el error que llega desde el if que verifica si el archivo enviado por parametro 1 existe y ademas tiene permisos de lectura. 
+    echo "Error. nombre_archivo no existe o no se pudo leer" #COMPLETAR
 }
 
-if test $# -lt 2; then
+if test $# -lt 2; then  #tiene menos de 2 parametros.
     ErrorS
 fi
 if ! test -r $1; then
     ErrorP
-elif test -f $1 && (test $2 = "L" || test $2 = "C" || test $2 = "M"); then
+elif test -f $1 && (test $2 = "L" || test $2 = "C" || test $2 = "M"); then #El primer parametro es un fichero regular y el segundo es un comando.
   if test $2 = "L"; then
     res=`wc -l $1`
-    echo "La cantidad de lineas del fichero es: $res" #cumplio con la sintaxis del comando, es decir que el primer parametro existe, es un fichero y es legible, el segundo parametro es una letra valida y ademas es 'L' 
+    echo "La cantidad de lineas del fichero es: $res" #cCOMPLETAR
   elif test $2 = "C"; then
     res=`wc -m $1`
-    echo "La cantidad de bytes del fichero es: $res" #cumplio con la sintaxis del comando, es decir que el primer parametro existe, es un fichero y es legible, el segundo parametro es una letra valida y ademas es 'C' 
+    echo "La cantidad de bytes del fichero es: $res" #COMPLETAR
   elif test $2 = "M"; then
     res=`wc -L $1`
-    echo "La longitud de la linea más larga es: $res" #umplio con la sintaxis del comando, es decir que el primer parametro existe, es un fichero y es legible, el segundo parametro es una letra valida y ademas es 'C' 
+    echo "La longitud de la linea más larga es: $res" #COMPLETAR 
   fi
 else
   ErrorS
@@ -57,9 +57,16 @@ fi
 #    Si se le ingresa mas de 2 parametros solo devuelve la primer consulta.
 #
 # b) Recibe 2 parámetros: El nombre del fichero y una letra mayúscula.
+#
 # c) y d) Ver el código.
+#
 # e) La variable "$#" brinda la información de la cantidad de parámetros que
-#    se pasan del script al shell. ---Falta variables similares---
+#    se pasan del script al shell. Las variables similares que podemos encontrar son:
+#    $0, que hace referencia al script, $1, $2...$N, que hace referencia al numero del 
+#    parametro en un script, #? (ultimo comando ejecutado), $$ (id de proceso) y por
+#    ultimo, #@ y $*, quienes devuelven la lista de parámetros o string de parámetros,
+#    respectivamente.
+#
 # f) En Shell Scripts tenemos 3 tipos de comillas (simple, doble, acento grave).
 #    Las comillas simples interpretan el contenido de forma literal. PorEj:
 #    SALUDO='Hola $USER, qué tal?' no mostraría el contenido de $USER al 
