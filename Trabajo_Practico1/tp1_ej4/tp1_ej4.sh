@@ -1,3 +1,22 @@
+#-----------------------Inicio Encabezado------------------------------##
+# Nombre Script: "ej_4.sh"
+# Numero Trabajo Practico: 1 
+# Numero Ejercicio: 4
+# Tipo: 1° Entrega
+# Integrantes:
+#
+#		Nombre y Apellido                                 DNI
+#		---------------------                           ----------
+#       Francisco Figueroa	                            32.905.374
+#       Adrian Morel		                            34.437.202
+#       Sergio Salas                                    32.090.753                 
+#       Fernando Sanchez	 		                	36.822.171
+#       Sabrina Tejada			       	     			37.790.024
+#
+##-----------------------Fin del Encabezado-----------------------------##
+
+
+
 #!/bin/bash
 
 ayuda()
@@ -8,7 +27,7 @@ ayuda()
     echo 
     echo "Descripcion:"
     echo
-    echo "          El script se puede utilizar para contar la cantidad"
+    echo "          El script se utiliza para contar la cantidad"
     echo "          de lineas de codigo y de comentario para una ruta y"
     echo "          extension que usted desee consultar.               "
     echo 
@@ -23,37 +42,41 @@ ayuda()
 
 errorSintax()
 {
-    echo "Hay un error de sintaxis"
+    echo "Hay un error en la sintaxis"
+	echo "La sintaxis correspondiente es la siguiente:"
+	echo
+	echo "$0 [ruta] [extension]"
+	echo "$0 -h para obtener la ayuda del script"
 }
 
 if test $# -eq 1; then
     if test $1 = "-h"; then
     ayuda
     else
-    echo "pulse -h para la ayuda"
+    echo "utilice $0 -h para la ayuda"
 fi
 elif test $# -lt 2; then
 errorSintax
-elif ! test -d $1; then
+elif ! test -d "$1"; then
 echo "imposible continuar, el directorio no existe..."
 else
 	echo
 	echo "Procesando...."
 	echo 
-	find "$1" -name "*.$2" > Resultados #aca almaceno la ruta a los archivos
+	find "$1" -name "*.$2" > /tmp/resultados #aca almaceno la ruta a los archivos
 	lcodigo=0
 	lcomentarios=0
-	cantFicheros=`wc -l Resultados`
+	cantFicheros=`wc -l "/tmp/resultados"`
 	ltotales=0
 
 	while IFS= read -r line
 	do
 		awk -f codigo.awk $line;
-		lcodigo=$(( lcodigo+`cat cod.txt` ))
-		lcomentarios=$(( lcomentarios+`cat com.txt` ))
-		ltotales=$(( ltotales+`cat lineas.txt` ))
-	done < Resultados
-
+		lcodigo=$(( lcodigo+`cat "/tmp/cod.txt"` ))
+		lcomentarios=$(( lcomentarios+`cat "/tmp/com.txt"` ))
+		lineasfichero=`wc -l $line | awk '{print $1}'`;
+		ltotales=$(( ltotales+lineasfichero ))
+	done < "/tmp/resultados"
 
 	lporCom=$(echo "scale = 2; $lcomentarios*100/$ltotales" | bc)
 	lporCod=$(echo "scale = 2; $lcodigo*100/$ltotales" | bc)
@@ -66,9 +89,8 @@ else
 	echo "      Total lineas comentadas: $lcomentarios"
 	echo " Porcentaje lineas comentadas: $lporCom%"
 	echo
-	rm Resultados
-	rm cod.txt
-	rm com.txt
-	rm lineas.txt
+	rm "/tmp/resultados"
+	rm "/tmp/cod.txt"
+	rm "/tmp/com.txt"
 fi
 

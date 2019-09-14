@@ -1,20 +1,25 @@
 BEGIN{ 
 	 comentarios = 0;
 	 codigo = 0;
-	 nrolinea = 1;
-	 lineas = 0;
 }
 { 
-   if(index($0, "/*")){
+   if(pos = index($0, "/*")){
+	if(pos > 1){
+        subc = substr($0, 1, pos);
+        if(index(subc, "//") > 1)
+        codigo++;
+    }
 	  inicom = 1;
 	  fincom = index($0, "*/")
 		while(! fincom){
 		 inicom++;
-		 lineas++;
 		 getline;
 		 fincom = index($0, "*/")
 		}
 	   comentarios+=inicom;
+	 #  if(){
+     #   
+     #   }
 	}
 	else
 	{
@@ -27,12 +32,9 @@ BEGIN{
 		}
 		else
 		codigo++;
-
-    	lineas++;
 	}  
 }	
 END{
-print comentarios > "com.txt";
-print codigo > "cod.txt";
-print lineas > "lineas.txt";
+print comentarios > "/tmp/com.txt";
+print codigo > "/tmp/cod.txt";
 }
