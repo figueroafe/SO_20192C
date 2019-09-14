@@ -33,8 +33,9 @@ helpExt()
     echo
     echo "Parametros:"
     echo
-    echo "        [directorio]     ingresar ruta de ficheros a renombrar."
-    echo "        En caso de no declararse se tomará como base el "
+    echo "        [directorio]     ingresar ruta de ficheros a renombrar. "
+    echo "        En caso de contener espacios ingresarlo entre comillas dobles. "
+    echo "        En caso de no declararse el directorio se tomará como base el "
     echo "        directorio donde se encuentra ubicado el script. "
     echo     
     echo "        -r         Renombrará ademas de los archivos del "
@@ -55,22 +56,22 @@ helpExt()
 recur=0
 if test $# -eq 0 ; #Si no envio parametro toma la direccion actual
 then
-    direc=$(pwd);
+    direc="$(pwd)";
 elif [ $1 = "-h" ] ; then #es consulta de ayuda 
     help
 
 elif [ $1 = "--help" ] ; then #es consulta de ayuda extendida
     helpExt
 elif [[ -d "$1" && $# = 1 ]] ; then #valido si es una direccion para un unico param
-    direc=$1
+    direc="$1"
 elif [[ $1 = "-r" && $# = 1 ]] ; then #valido si es recursivo para un unico param
-    direc=$(pwd);
+    direc="$(pwd)";
     recur=1
 elif [[ -d "$1" && $2 = "-r" && $# = 2 ]] ; then #Si envia mas de un parametro
-    direc=$1
+    direc="$1"
     recur=1
 elif [[ -d "$2" && $1 = "-r" && $# = 2 ]] ; then #Si envia mas de un parametro
-    direc=$2
+    direc="$2"
     recur=1
 else
     echo "ERROR: los parametros ingresados son invalidos"
@@ -78,13 +79,13 @@ else
 fi 
 
 echo "Voy a trabajar en el directorio: $direc"
-cd $direc; 
+cd "$direc"; 
 cant=0;
 #cant=$((cant+=1));
 if [[ $recur -eq 1 ]] ; then
     find . -type f -name '* *'  | while IFS=" " read -r FILE
     do 
-        echo "Archivo:"
+        echo "Fichero:"
         echo "$FILE"
         if [[ -f "$(basename "$FILE"|tr -s [:space:] _ )" ]] 
         then
@@ -101,7 +102,7 @@ if [[ $recur -eq 1 ]] ; then
 else
     find -maxdepth 1 -type f -name '* *'  | while IFS=" " read -r FILE #NO RECURSIVO
     do 
-        echo "Archivo:"
+        echo "Fichero:"
         echo "$FILE"
         if [[ -f "$(basename "$FILE"|tr -s [:space:] _ )" ]] 
         then
@@ -112,9 +113,7 @@ else
             mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )"; 
             echo "Este fichero se renombro con exito";
         fi
-            echo "$cant";
-            cant=$((cant+=1));
-            echo "$cant";
+	cant=$((cant + 1));            
     done
 fi
 echo "cantidad de archivos renombrados:";
