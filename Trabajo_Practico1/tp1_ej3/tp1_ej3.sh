@@ -2,11 +2,9 @@
 
 var=$1
 
-destino=/home/francisco/bkps
-ORIGEN=/home/francisco/aws
-D=`date +%Y-%m-%d-%T`
 LOCK="/var/lock/bkp.lock"
 trap 'rm -f $LOCK' INT
+BKP_SH="./bkpd"
 
 #echo "##########################################################################"
 #echo "--------------------------------------------------------------------------"
@@ -35,21 +33,29 @@ trap 'rm -f $LOCK' INT
 #{
 #	ERROR="Opcion Invalida"
 #}
-#
-#funcion_backup()
-#{
-#		while [ -f $LOCK ] 
-#		do
-#			hh=`date +%Y-%m-%d-%T`
-#			tar -czf $dest/bkp_$hh.tar.gz $orig 
-#			echo "Backup realizado."
-#			sleep $slp
-#		done
-#}
+
 
 detener_demonio()
 {
 	cat /tmp/bkp.pid | awk '{print "kill -9 "$1}'|sh
+	>/tmp/bkp.pid
+}
+
+borra_que_te_borra()
+{
+	#echo "Ingresar directorio de backups:"
+	#read destino
+	echo "Ingresar cantidad de backups a guardar:"
+	read cant
+	#rm -f $(ls -1t | awk  -v c="$cant" '{NR > c}')
+	#cd $destino
+	cd $dest
+	rm $(ls -1t | awk 'NR>'$cant)
+	#ls $(ls -1t | awk 'NR>'$cant)
+	#echo "rm $(ls -1t $destino| awk 'NR >= "$cant" ')" \n
+	#echo "$(ls -1t $destino| awk 'NR >= "$cant" ')" > /tmp/bkp_borrar.txt > /dev/null 2>&1
+	#cat /tmp/bkp_borrar.txt | awk ''
+
 }
 
 case $var in
@@ -71,28 +77,33 @@ case $var in
 		fi
 
 
-		echo "Preciones Ctrl+C para interrumpir."
-		#setsid funcion_backup >/tmp/bkp.pid 2>$1 < /dev/null &
-		while [ -f $LOCK ] 
-		do
-			hh=`date +%Y-%m-%d-%T`
-			tar -czf $dest/bkp_$hh.tar.gz $orig 
-			echo "Backup realizado."
-			sleep $slp 
-		done
+		#echo "Preciones Ctrl+C para interrumpir."
+		
+		$BKP_SH $orig $dest $slp & echo $! >/tmp/bkp.pid 2>$1 < /dev/null
+		
+		#sh $BKP_SH $orig $dest $slp >/tmp/bkp.pid &
+		#while [ -f $LOCK ] 
+		#do
+		#	hh=`date +%Y-%m-%d-%T`
+		#	tar -czf $dest/bkp_$hh.tar.gz $orig 
+		#	echo "Backup realizado."
+		#	sleep $slp 
+		#done
 		;;
 	stop )
-		echo "Se detiene el demonio de backup."+
+		echo "Se detiene el demonio de backup."
 		rm -f $LOCK
 		detener_demonio
 		;;
 	count )
-		ls -1tr $destino | wc -l
+		#echo "Ingresar directorio de backups:"
+		#read destino
+		#ls -1tr $destino | wc -l
+		ls -1tr $dest | wc -l
 		;;
 	clear )
-		echo "Ingresar cantidad:"
-		read cant
-		echo rm $(ls -1t $destino| awk ' NR => ${cant} ')
+		echo ""
+		borra_que_te_borra
 		;;
 	play )
 		echo ""
