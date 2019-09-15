@@ -15,7 +15,7 @@ BEGIN{
 		 fincom = index($0, "*/")
 		}
 	   comentarios+=inicom;
-	   if(fincom < NF){
+	   if(fincom+1 < length($0)){
         	codigo++;
         }
 	}
