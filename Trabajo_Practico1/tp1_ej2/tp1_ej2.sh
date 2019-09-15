@@ -28,7 +28,7 @@ help1()
     echo
     echo "        El script permite renombrar todos los ficheros que posean"
     echo "        uno o mas espacios en su nombre, reemplazandolos por _"
-    echo "        ./tp1_ej1.sh [directorio] [-r recursividad]"
+    echo "        ./tp1_ej2.sh [directorio] [-r recursividad]"
     echo 
     echo "=============="
     echo 
@@ -50,20 +50,23 @@ helpExt()
     echo "Parametros:"
     echo
     echo "        [directorio]     ingresar ruta de ficheros a renombrar. "
-    echo "        En caso de contener espacios ingresarlo entre comillas dobles. "
-    echo "        En caso de no declararse el directorio se tomará como base el "
-    echo "        directorio donde se encuentra ubicado el script. "
-    echo     
+    echo "        -En caso de contener espacios ingresarlo entre comillas dobles. "
+    echo "        excepto en el caso del uso del caracter ~ "
+    echo
     echo "        -r         Renombrará ademas de los archivos del "
     echo "        directorio indicado, tambien los de los subdirectorios"    
     echo    
+    echo "        -En caso de no declararse el directorio se tomará como base el "
+    echo "        directorio donde se encuentra ubicado el script. "
+    echo     
     echo "=============="    
     echo 
     echo "Ejemplos:"
     echo
     echo "        ./tp1_ej2.sh "
     echo "        ./tp1_ej2.sh -r"
-    echo "        ./tp1_ej2.sh  /home/user/Documentos -r"
+    echo "        ./tp1_ej2.sh  \"/home/user/Documentos\" -r"
+    echo "        ./tp1_ej2.sh  ./Escritorio -r"
     echo "        ./tp1_ej2.sh  ~/Descargas "
     echo 
     exit
