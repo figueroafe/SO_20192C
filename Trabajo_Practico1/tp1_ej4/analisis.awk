@@ -1,11 +1,22 @@
+function verLineaPorIzq(){
+	subc = substr($0, 1, pos-1);
+	print subc;
+	if(index(subc, "//") == 1)
+	senal++;
+	else
+	codigo++;
+}
+
+
 BEGIN{ 
 	 comentarios = 0;
 	 codigo = 0;
+	 senal = 0;
 }
 { 
    if(pos = index($0, "/*")){
 	if(pos > 1){
-        codigo++;
+      verLineaPorIzq();
     }
 	  inicom = 1;
 	  fincom = index($0, "*/")
@@ -16,7 +27,8 @@ BEGIN{
 		}
 	   comentarios+=inicom;
 	   if(fincom+1 < length($0)){
-        	codigo++;
+        #	verLinea();
+			codigo++;
         }
 	}
 	else
