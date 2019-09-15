@@ -1,3 +1,20 @@
+#-----------------------Inicio Encabezado------------------------------##
+# Nombre Script: "ej_6.sh"
+# Numero Trabajo Practico: 1 
+# Numero Ejercicio: 6
+# Tipo: 1° Entrega
+# Integrantes:
+#
+#		Nombre y Apellido                                 DNI
+#		---------------------                           ----------
+#       Francisco Figueroa	                            32.905.374
+#       Adrian Morel		                            34.437.202
+#       Sergio Salas                                    32.090.753                 
+#       Fernando Sanchez	 		                	36.822.171
+#       Sabrina Tejada			       	     			37.790.024
+#
+##-----------------------Fin del Encabezado-----------------------------##
+
 #!/bin/bash
 
 
