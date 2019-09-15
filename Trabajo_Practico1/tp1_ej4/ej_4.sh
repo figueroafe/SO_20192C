@@ -35,9 +35,11 @@ ayuda()
     echo 
     echo "          [ruta] [extension] para que el script devuelva lo siguiente"
     echo "          1. Cantidad de archivos analizados"
-    echo "          2. Cantidad de lineas de codigo totales y % contra el total"
-    echo "          3. Cantidad de lineas comentadas total y % contra el total"
-    echo 
+    echo "          2. Cantidad de lineas de codigo totales y % contra el total de lineas"
+    echo "          3. Cantidad de lineas comentadas total  y % contra el total de lineas"
+    echo
+	echo "Si el directorio contiene espacios, utilice comillas para indicar la [ruta]"
+	echo 
 }
 
 errorSintax()
@@ -47,6 +49,7 @@ errorSintax()
 	echo
 	echo "$0 [ruta] [extension]"
 	echo "$0 -h para obtener la ayuda del script"
+	echo
 }
 
 if test $# -eq 1; then
@@ -55,7 +58,7 @@ if test $# -eq 1; then
     else
     echo "utilice $0 -h para la ayuda"
 fi
-elif test $# -lt 2; then
+elif test $# -gt 2; then
 errorSintax
 elif ! test -d "$1"; then
 echo "imposible continuar, el directorio no existe..."
