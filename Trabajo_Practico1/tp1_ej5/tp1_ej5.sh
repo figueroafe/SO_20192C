@@ -1,14 +1,20 @@
-# Trabajo Practico 1
-# Ejercicio 5
-# ***Alumnos***
-#
-#
-#
-#
-#
-#
-#
 
+#-----------------------Inicio Encabezado------------------------------##
+# Nombre Script: "ej_5.sh"
+# Numero Trabajo Practico: 1 
+# Numero Ejercicio: 5
+# Tipo: 1° Entrega
+# Integrantes:
+#
+#		Nombre y Apellido                                 DNI
+#		---------------------                           ----------
+#       Francisco Figueroa	                            	32.905.374
+#       Adrian Morel		                            	34.437.202
+#       Sergio Salas                                    	32.090.753                 
+#       Fernando Sanchez	 		                36.822.171
+#       Sabrina Tejada			       	     		37.790.024
+#
+##-----------------------Fin del Encabezado-----------------------------##
 
 #!bin/bash
 
@@ -36,11 +42,24 @@ help()
 	echo
 	echo "		[archivo] mueve el archivo a la papelera de reciclaje."
 	echo 
+	echo "Consideraciones"
+	echo
+	echo "		-Se debe indicar el nombre del archivo junto con su extensión."
+	echo
+	echo "		-La ruta de los archivos debe ir entre comillas dobles (\"ruta\")."
+	echo
+	echo "		-Si se restaura un archivo a una ruta donde hay un archivo con" 
+	echo "		el mismo nombre, se sobreescribe con el archivo restaurado."
+	echo
+	echo "		-Si hay más de un archivo que coincida con el nombre del archivo"
+	echo "		a restaurar, se restaurarán todos los archivos a su ruta"
+	echo "		original."
+	echo
 	echo "Ejemplos:"
 	echo
 	echo "		./tp1_ej5.sh -l"
 	echo 
-	echo "		./tp1_ej5.sh -r archivoARecuperar.txt"
+	echo "		./tp1_ej5.sh -r \"archivoARecuperar.txt\""
 	echo 
 	exit
 }
@@ -81,13 +100,21 @@ if test $# -eq 1; then #para 1 parametro
 	elif test "$1" = "-l"; then #si es el parametro "-l"
 		
 		if [ `ls ~/.papelera/ | wc -l` -ne 0 ]; then #verifica si la cantidad de ficheros que tiene la papelera no es cero
-			archivos=`ls ~/.papelera -1 -c`
+	
 			echo ""
-			echo "	Archivos de la papelera"
-			echo "	======================="
-			echo "Nombre"
-			echo "------"
-			echo "$archivos"
+			awk -F/ 'BEGIN{
+					printf "\t\t\tArchivos de la papelera\n"
+					printf "======================================================================\n"
+					printf "Nombre del archivo\t\t\tUbicacion original\n"
+					printf "------------------\t\t\t------------------------------\n"
+					}
+					
+					{if ($NF !~ /^$/)
+					{nombre=substr($NF, 1, length($NF)-1);
+					ruta=substr($0, 1, index($0, $NF)-1);
+					printf ""nombre"\t\t\t"ruta"\n";
+					}
+				}' ~/.papelera/.rutas.txt
 			echo ""
 		else	
 			PapeleraVacia
@@ -117,29 +144,39 @@ if test $# -eq 1; then #para 1 parametro
 elif test "$1" = "-r"; then #sino tiene un parametro, hay 2 que deben ser -r y el nombre del archivo con su extensión
 	if [ `ls ~/.papelera/ | wc -l` -ne 0 ]; then #verifica si la cantidad de ficheros que tiene la papelera no es cero	
 		echo "" > ~/.papelera/.norestaurar.txt
-		awk -F/ -v archivo=$2	'BEGIN{
-									cont=0;
-								}
+		echo "" > ~/.papelera/.restaurar.txt
+		awk -F/ -v archivo="$2"	'BEGIN{
+					cont=0;
+					}
 								
-								{
-								expresion="^"archivo"[0-9]";
-								if ($NF ~ expresion)
-									{nombreSinNro=substr($0, 1, length($0)-1);
-									system("mv ~/.papelera/"$NF" "nombreSinNro" ");
-									cont++;
-								}
-								else
-									system("echo "$0" >> ~/.papelera/.norestaurar.txt");
-								}
+					{
+					expresion="^"archivo"[0-9]";
+					if ($NF ~ expresion)
+						{system("echo "$0" >> ~/.papelera/.restaurar.txt");
+						cont++;
+						}
+					else
+						system("echo "$0" >> ~/.papelera/.norestaurar.txt");
+					}
 		
-								END{
-									if(cont == 0)
-										printf "\nNo se encontro ningún archivo en la papelera que coincida con la búsqueda. Debe indicar el nombre del archivo y la extensión, intente de nuevo\n\n";
-									else
-										{printf "\nEl/los archivo/s se ha/n restaurado a su ubicación original\n\n";
-										system("mv ~/.papelera/.norestaurar.txt ~/.papelera/.rutas.txt");
-										}
-								}' ~/.papelera/.rutas.txt
+					END{
+						if(cont == 0)
+							printf "\nNo se encontro ningún archivo en la papelera que coincida con la búsqueda. Debe indicar el nombre del archivo y la extensión, intente de nuevo\n\n";
+						else
+						{printf "\nEl/los archivo/s se ha/n restaurado a su ubicación original\n\n";
+							system("mv ~/.papelera/.norestaurar.txt ~/.papelera/.rutas.txt");
+						}
+					}' ~/.papelera/.rutas.txt
+	
+		while read line
+		do
+			if [ "$line" != "" ]; then
+			nombre=`basename "$line"`
+			destino="$(dirname "$line")/"$2""
+			mv ~/.papelera/"$nombre" "$destino";
+			fi
+		done < ~/.papelera/.restaurar.txt
+
 	else
 		PapeleraVacia
 	fi

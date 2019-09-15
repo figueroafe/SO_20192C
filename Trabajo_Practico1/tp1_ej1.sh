@@ -1,15 +1,19 @@
-# tp1_ej1.sh
-# TRABAJO PRACTICO 1
-# EJERCICIO 1
-# *Alumnos*
-# 
+#-----------------------Inicio Encabezado------------------------------##
+# Nombre Script: "tp1_ej1.sh"
+# Numero Trabajo Practico: 1 
+# Numero Ejercicio: 1
+# Tipo: 1° Entrega
+# Integrantes:
 #
+#		Nombre y Apellido                                 DNI
+#		---------------------                           ----------
+#       Francisco Figueroa	                            32.905.374
+#       Adrian Morel		                            34.437.202
+#       Sergio Salas                                    32.090.753                 
+#       Fernando Sanchez	 		                	36.822.171
+#       Sabrina Tejada			       	     			37.790.024
 #
-#
-#
-#
-#
-#
+##-----------------------Fin del Encabezado-----------------------------##
 
 
 #!/bin/bash
@@ -34,7 +38,7 @@ if ! test -r $1; then
 elif test -f $1 && (test $2 = "L" || test $2 = "C" || test $2 = "M"); then #El primer parametro es un fichero regular y el segundo es un comando.
   if test $2 = "L"; then
     res=`wc -l $1`
-    echo "La cantidad de lineas del fichero es: $res" #cCOMPLETAR
+    echo "La cantidad de lineas del fichero es: $res" #COMPLETAR
   elif test $2 = "C"; then
     res=`wc -m $1`
     echo "La cantidad de bytes del fichero es: $res" #COMPLETAR
