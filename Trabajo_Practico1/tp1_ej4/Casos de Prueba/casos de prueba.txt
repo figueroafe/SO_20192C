@@ -1,0 +1,5 @@
+caso0: Tiene comentarios // y lineas de codigo.
+caso1: Tiene comentarios // y una linea compartida de // + codigo.
+caso2: Tiene /* y */ en la primera linea
+caso3: Tiene codigo + /* en la misma linea.
+
