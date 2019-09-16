@@ -1,15 +1,5 @@
-function verLineaPorIzq(){
-	subc = substr($0, 1, pos-1);
-	print subc;
-	if(index(subc, "//") == 1)
-	senal++;
-	else
-	codigo++;
-}
-
 function verLineaPorDer(){
     subc2 = substr($0, fincom+2, (length($0)-fincom));
-    print subc2;
     if(index(subc2, "//") == 1)
 	comentario++;
 	else{
@@ -23,12 +13,13 @@ function verLineaPorDer(){
 BEGIN{ 
 	 comentarios = 0;
 	 codigo = 0;
-	 senal = 0;
 }
 { 
-   if(pos = index($0, "/*")){
-	if(pos > 1){
-      verLineaPorIzq();
+   barraBarra = index($0, "//");
+   barraAst = index($0, "/*");
+   if((barraBarra == 0 && barraAst != 0) || (barraAst != 0 && barraAst < barraBarra)){
+	if(barraAst > 1){
+      codigo++;
     }
 	  inicom = 1;
 	  fincom = index($0, "*/")
@@ -36,7 +27,6 @@ BEGIN{
 		while(!fincom && haylinea){
 		 inicom++;
 		 haylinea = getline;
-         print haylinea;
 		 fincom = index($0, "*/")
 		}
        if(haylinea){
@@ -49,8 +39,8 @@ BEGIN{
 	}
 	else
 	{
-	if(t = index($0, "//")){
-		    if(t == 1){
+	if(barraBarra != 0){
+		    if(barraBarra == 1){
 		    comentarios++;}
 		    else{
 		    comentarios++;
