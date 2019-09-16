@@ -7,6 +7,18 @@ function verLineaPorIzq(){
 	codigo++;
 }
 
+function verLineaPorDer(){
+    subc2 = substr($0, fincom+2, (length($0)-fincom));
+    print subc2;
+    if(index(subc2, "//") == 1)
+	comentario++;
+	else{
+    if(index(subc2, "//") == 0)
+	codigo++;
+    else{
+    codigo++;
+    comentario++;}}
+}
 
 BEGIN{ 
 	 comentarios = 0;
@@ -27,8 +39,7 @@ BEGIN{
 		}
 	   comentarios+=inicom;
 	   if(fincom+1 < length($0)){
-        #	verLinea();
-			codigo++;
+        	verLineaPorDer();
         }
 	}
 	else
