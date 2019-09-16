@@ -5,5 +5,5 @@ caso3: Tiene codigo + /* en la misma linea
 caso4: Tiene */ mas codigo en la misma linea
 caso5: Tiene */ mas codigo mas // en la misma linea
 caso6: No tiene corte el /*. Se toma todo como comentario
+caso7: Un // antes que un /*, Se toma como comentario
 
-Falta: Validar que cuando empiece // y /* tome // y no /*
