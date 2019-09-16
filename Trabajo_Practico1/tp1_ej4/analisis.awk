@@ -32,15 +32,20 @@ BEGIN{
     }
 	  inicom = 1;
 	  fincom = index($0, "*/")
-		while(!fincom){
+      haylinea=1;
+		while(!fincom && haylinea){
 		 inicom++;
-		 getline;
+		 haylinea = getline;
+         print haylinea;
 		 fincom = index($0, "*/")
 		}
+       if(haylinea){
 	   comentarios+=inicom;
 	   if(fincom+1 < length($0)){
         	verLineaPorDer();
-        }
+        }}
+        else
+        comentarios+=inicom-1;
 	}
 	else
 	{
