@@ -9,11 +9,11 @@
 #
 #		Nombre y Apellido                                 DNI
 #		---------------------                           ----------
-#       ----------------------                          ----------
-#       ---------------------                           ----------
-#       Sergio Salas                                    32.090.753                 
-#       --------------------- 		                	----------
-#       ---------------------       	     			----------
+#       Francisco Figueroa	                            	32.905.374
+#       Adrian Morel		                            	34.437.202
+#       Sergio Salas                                    	32.090.753
+#       Fernando Sanchez	 		                		36.822.171
+#       Sabrina Tejada			       	     				37.790.024
 #
 ##-----------------------Fin del Encabezado-----------------------------##
 
@@ -38,6 +38,7 @@ param="mal";
 if (( $# == 0 ))
 then
     param="-nada";
+    echo
     echo "Parametros insuficientes"
     Ayuda
     exit
@@ -66,71 +67,45 @@ else
 fi
 
 # Fin Verificacion de parametros
-path="$1"
-
-dirwsub=$(find "$path" -maxdepth 2 -type d)
-
-
-find /home/sergio/Documents -maxdepth 2 -type d | awk '/\.?\/Documents\/\w/'
-
-[0-9a-fA-F_-]
-
-find /home/sergio/Documents -maxdepth 2 -type d | awk '/\.?\/Documents\/[0-9a-fA-F]/'
-
-find /home/sergio/Documents -maxdepth 2 -type d | awk '/\.?\/Documents\/(?!\/)/'
-
-find /home/sergio/Documents -maxdepth 2 -type d | awk '/\.?\/Documents\/(?:(?!\/).)*/'
-
-
-^(?:(?!ab).)+$
-
-find /home/sergio/Documents -maxdepth 2 -type d | awk '/\.?\/Documents\/^(?:([\/]).)+$/'
-
 
 #########################################
 #! /bin/bash
 
-path="/home/sergio/Documents"
-
-readarray vect1 <<< "$(find "$path" -maxdepth 2 -mindepth 1  -type d)"
-
-readarray vect2 <<< "$(find "$path" -maxdepth 2 -mindepth 2  -type d)"
-
+path="$1"
 vwsubd=()
 
-echo "${vect1[@]}"
-echo
-echo "${vect2[@]}"
+readarray vect1 <<< "$(find "$path" -maxdepth 1 -mindepth 1  -type d)"
+
+readarray vect2 <<< "$(du -kx -d 1 "$path" | sort -rn | head -n 11 |cut -f2)"
 
 for i in "${vect1[@]}"; do
 
-    count=${#vect2[@]}
+	tmp=$(echo "$i" | cut -d$'\n' -f1)
+	aux=$(find "$tmp" -maxdepth 1 -mindepth 1 -type d | wc -l)
 
-    for j in "${vect2[@]}"; do    
+	if [ $aux -eq 0 ];
+	then
+		vwsubd+=("$i")
+	fi
 
-        echo "vect1"
-        echo "$i"
-        echo
-        echo "vect2"
-        echo "$j"
-        count=$(($count-1))
+done	
 
-        if [ "$i" != "$j" ];
-        then
-            echo "entro"
-            aux=("$i")
-        else
-            flag=1
-        fi
+echo "Directorio           Cant Archivos"
+echo
+
+for j in "${vect2[@]}"; do
+
+    for h in "${vwsubd[@]}";do
+
+    if [ "$j" == "$h" ];
+    then
+        tmp=$(echo "$h" | cut -d$'\n' -f1)
+        cant=$(find "$tmp" -type f | wc -l)
+    
+        echo "$tmp"   "  $cant"  "arch"
+    
+    fi    
+
     done
 
-    if [ $count -eq 0 && $flag -eq 0 ];
-    then
-        vwsubd+=("$aux")
-    fi
-
-    flag=0
 done
-
-echo "vector final"
-echo "${vwsubd[@]}"
