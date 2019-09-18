@@ -128,9 +128,12 @@ elif test $# -eq 4; then #valido por 4 parametros
 		echo "$3">/tmp/dest.txt #Me guardo el origen y destino para luego reutilizarlos
 	else
 		echo "Parametros Invalidos."
-		exit
-		
+		exit		
 	fi
+elif test $# -eq 3 || test $# -gt 4; then
+	echo "Cantidad de parametros invalidos."
+	echo "Ejecute ./ej3.sh -help para ver ejemplos de ejecición"
+	exit
 fi
 
 case "$var" in
