@@ -6,13 +6,13 @@
 # Tipo: 1° Entrega
 # Integrantes:
 #
-#		Nombre y Apellido                                 DNI
-#		---------------------                           ----------
-#       Francisco Figueroa	                            	32.905.374
-#       Adrian Morel		                            	34.437.202
-#       Sergio Salas                                    	32.090.753                 
-#       Fernando Sanchez	 		                36.822.171
-#       Sabrina Tejada			       	     		37.790.024
+# Nombre y Apellido                                 DNI
+# ---------------------                         	----------
+# Francisco Figueroa	                        	32.905.374
+# Adrian Morel		                            	34.437.202
+# Sergio Salas                                    	32.090.753                 
+# Fernando Sanchez	 		      			        36.822.171
+# Sabrina Tejada			       	     			37.790.024
 #
 ##-----------------------Fin del Encabezado-----------------------------##
 
@@ -44,16 +44,21 @@ help()
 	echo 
 	echo "Consideraciones"
 	echo
-	echo "		-Se debe indicar el nombre del archivo junto con su extensión."
+	echo "		-Al momento de restaurar un archivo, se debe indicar el nombre"
+	echo "		del archivo junto con su extensión."
 	echo
-	echo "		-La ruta de los archivos debe ir entre comillas dobles (\"ruta\")."
+	echo "		-La ruta de los archivos debe ir entre comillas dobles, salvo"
+	echo "		en el caso de usar el caracter ~."
 	echo
 	echo "		-Si se restaura un archivo a una ruta donde hay un archivo con" 
 	echo "		el mismo nombre, se sobreescribe con el archivo restaurado."
 	echo
-	echo "		-Si hay más de un archivo que coincida con el nombre del archivo"
-	echo "		a restaurar, se restaurarán todos los archivos a su ruta"
-	echo "		original."
+	echo "		-Si hay más de un archivo que coincida con el nombre del"
+	echo "		archivo a restaurar, se restaurarán todos los archivos a su"
+	echo "		ruta original."
+	echo
+	echo "		-Para ejecutar el scrip, se debe estar ubicado en la carpeta"
+	echo "		donde se encuentra el scrip."
 	echo
 	echo "Ejemplos:"
 	echo
@@ -102,19 +107,7 @@ if test $# -eq 1; then #para 1 parametro
 		if [ `ls ~/.papelera/ | wc -l` -ne 0 ]; then #verifica si la cantidad de ficheros que tiene la papelera no es cero
 	
 			echo ""
-			awk -F/ 'BEGIN{
-					printf "\t\t\tArchivos de la papelera\n"
-					printf "======================================================================\n"
-					printf "Nombre del archivo\t\t\tUbicacion original\n"
-					printf "------------------\t\t\t------------------------------\n"
-					}
-					
-					{if ($NF !~ /^$/)
-					{nombre=substr($NF, 1, length($NF)-1);
-					ruta=substr($0, 1, index($0, $NF)-1);
-					printf ""nombre"\t\t\t"ruta"\n";
-					}
-				}' ~/.papelera/.rutas.txt
+			awk -F/ -f 'lista.awk' ~/.papelera/.rutas.txt
 			echo ""
 		else	
 			PapeleraVacia
@@ -145,28 +138,7 @@ elif test "$1" = "-r"; then #sino tiene un parametro, hay 2 que deben ser -r y e
 	if [ `ls ~/.papelera/ | wc -l` -ne 0 ]; then #verifica si la cantidad de ficheros que tiene la papelera no es cero	
 		echo "" > ~/.papelera/.norestaurar.txt
 		echo "" > ~/.papelera/.restaurar.txt
-		awk -F/ -v archivo="$2"	'BEGIN{
-					cont=0;
-					}
-								
-					{
-					expresion="^"archivo"[0-9]";
-					if ($NF ~ expresion)
-						{system("echo "$0" >> ~/.papelera/.restaurar.txt");
-						cont++;
-						}
-					else
-						system("echo "$0" >> ~/.papelera/.norestaurar.txt");
-					}
-		
-					END{
-						if(cont == 0)
-							printf "\nNo se encontro ningún archivo en la papelera que coincida con la búsqueda. Debe indicar el nombre del archivo y la extensión, intente de nuevo\n\n";
-						else
-						{printf "\nEl/los archivo/s se ha/n restaurado a su ubicación original\n\n";
-							system("mv ~/.papelera/.norestaurar.txt ~/.papelera/.rutas.txt");
-						}
-					}' ~/.papelera/.rutas.txt
+		awk -F/ -v archivo="$2"	-f 'restaura.awk' ~/.papelera/.rutas.txt
 	
 		while read line
 		do
