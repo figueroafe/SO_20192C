@@ -71,6 +71,7 @@ detener_demonio()
 {
 	cat /tmp/bkp.pid | awk '{print "kill -9 "$1}'|sh
 	>/tmp/bkp.pid
+	>/tmp/orig.txt
 }
 
 borrar()
@@ -91,10 +92,19 @@ contar()
 
 play_now()
 {
-	D=`date +%Y-%m-%d-%T`	
-	destino=$(cat /tmp/dest.txt)		
-	origen=$(cat /tmp/orig.txt)
-	tar -czf "$destino"/bkp_$D.tar.gz "$origen" > /dev/null 2>&1	#Realizo el backup en el momento.
+	if test -s /tmp/orig.txt; then
+		if test -s /tmp/dest.txt; then
+			echo "Se realiza el backup en este instante."
+			D=`date +%Y-%m-%d-%T`	
+			destino=$(cat /tmp/dest.txt)		
+			origen=$(cat /tmp/orig.txt)
+			tar -czf "$destino"/bkp_$D.tar.gz "$origen" > /dev/null 2>&1	#Realizo el backup en el momento.
+		fi
+	else
+		echo "Debe ejecutar el demonio de backups para realizar está acción."
+		echo "De necesitar ayudar ejecute ./ej_3.sh -h"
+		exit		
+fi
 }
 
 if test $# -eq 1; then #valido por un parametro
@@ -162,7 +172,6 @@ case "$var" in
 		borrar $nn			#Borro dejando los ultimos solicitados.
 		;;
 	play )
-		echo "Se realiza el backup en este instante."
 		play_now
 		;;	
 esac
