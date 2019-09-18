@@ -89,6 +89,14 @@ contar()
 	ls -1tr "$destino" | wc -l
 }
 
+play_now()
+{
+	D=`date +%Y-%m-%d-%T`	
+	destino=$(cat /tmp/dest.txt)		
+	origen=$(cat /tmp/orig.txt)
+	tar -czf "$destino"/bkp_$D.tar.gz "$origen" > /dev/null 2>&1	#Realizo el backup en el momento.
+}
+
 if test $# -eq 1; then #valido por un parametro
 	
 	if test $var = "-?" || test $var = "-h" || test $var = "-help" ; then #valido si necesita una ayuda
@@ -125,20 +133,19 @@ elif test $# -eq 4; then #valido por 4 parametros
 	fi
 fi
 
-case "$1" in
+case "$var" in
 	start )
 		if [ ! -e $LOCK ]
 		then
 			echo "Se inicializa el demonio de backups."
 			trap "rm -f $LOCK; exit" INT TERM EXIT
 			touch $LOCK
+			$BKP_SH "$2" "$3" $4 & echo $! >/tmp/bkp.pid 2>$1 < /dev/null #Ejecuto el backups llamando al archivo bkpd
 			trap - INT TERM EXIT
 		else
 			echo "Ya se está ejecutando el demonio de backups."
 			exit 1
 		fi
-
-		$BKP_SH "$2" "$3" $4 & echo $! >/tmp/bkp.pid 2>$1 < /dev/null #Ejecuto el backups llamando al archivo bkpd
 		;;
 	stop )
 		echo "Se detiene el demonio de backup."
@@ -152,10 +159,7 @@ case "$1" in
 		borrar $nn			#Borro dejando los ultimos solicitados.
 		;;
 	play )
-		echo ""
-		D=`date +%Y-%m-%d-%T`	
-		destino=$(cat /tmp/dest.txt)		
-		origen=$(cat /tmp/orig.txt)
-		tar -czf "$	destino"/bkp_$D.tar.gz "$origen" > /dev/null 2>&1	#Realizo el backup en el momento.
+		echo "Se realiza el backup en este instante."
+		play_now
 		;;	
 esac
