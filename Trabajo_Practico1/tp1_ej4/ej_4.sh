@@ -33,7 +33,7 @@ ayuda()
     echo 
     echo "Parametros:"
     echo 
-    echo "          [ruta] [extension] para que el script devuelva lo siguiente"
+    echo "          $0 [ruta] [extension] para que el script devuelva lo siguiente"
     echo "          1. Cantidad de archivos analizados"
     echo "          2. Cantidad de lineas de codigo totales y % contra el total de lineas"
     echo "          3. Cantidad de lineas comentadas total  y % contra el total de lineas"
@@ -74,7 +74,7 @@ else
 
 	while IFS= read -r line
 	do
-		awk -f analisis.awk "$line";
+		awk -f analisis.awk "$line";	#genera los 2 ficheros que uso para sumar en las siguientes 2 lineas
 		lcodigo=$(( lcodigo+`cat "/tmp/cod.txt"` ))
 		lcomentarios=$(( lcomentarios+`cat "/tmp/com.txt"` ))
 		lineasfichero=`wc -l "$line" | awk '{print $1}'`;
