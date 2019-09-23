@@ -2,14 +2,14 @@
 # Nombre Script: "ej_2.sh"
 # Numero Trabajo Practico: 1 
 # Numero Ejercicio: 2
-# Tipo: 1° Entrega
+# Tipo: 2° Entrega
 # Integrantes:
 #
-#		Nombre y Apellido                                 DNI
-#		---------------------                           ----------
-#       Francisco Figueroa	                            	32.905.374
-#       Adrian Morel		                            	34.437.202
-#       Sergio Salas                                    	32.090.753                 
+#		Nombre y Apellido                           DNI
+#		---------------------                       ----------
+#       Francisco Figueroa	                        32.905.374
+#       Adrian Morel		                        34.437.202
+#       Sergio Salas                                32.090.753                 
 #       Fernando Sanchez	 		                36.822.171
 #       Sabrina Tejada			       	     		37.790.024
 #
@@ -24,7 +24,6 @@ help1()
     echo "=============="
     echo
     echo "Descripcion:"
-
     echo
     echo "        El script permite renombrar todos los ficheros que posean"
     echo "        uno o mas espacios en su nombre, reemplazandolos por _"
@@ -76,9 +75,8 @@ recur=0
 if test $# -eq 0 ; #Si no envio parametro toma la direccion actual
 then
     direc=$(pwd);
-elif [[ $1 = "-h" ]] ; then #es consulta de ayuda 
-    help
-
+elif [[ $1 = "-h" || $1 = "-?" ]] ; then #es consulta de ayuda 
+    help1
 elif [[ $1 = "--help" ]] ; then #es consulta de ayuda extendida
     helpExt
 elif [[ -d "$1" && $# = 1 ]] ; then #valido si es una direccion para un unico param
@@ -105,35 +103,39 @@ if [[ $recur -eq 1 ]] ; then
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
     find . -type f -name '* *'  | while IFS=" " read -r FILE
     do        
-	echo "Fichero:"
-        echo "$FILE"
-        if [[ -f "$(dirname "$FILE")"/"$(basename "$FILE"|tr -s [:space:] _ )" ]] 
+	    echo "Fichero: "$FILE""
+        nombrearch="$(basename "$FILE"|tr -s [:space:] _ | sed -e 's/.$//')" 
+        if [[ -f $nombrearch ]] 
         then
             echo "El renombre de este fichero ya existe, se renombrara con  '-copy'"
-            mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )-copy";
-            echo "Este fichero se renombro con exito" ;
+            mv -i "$FILE" "$(dirname "$FILE")/"$nombrearch"-copy";
+            echo "Este fichero se renombro con exito a "$nombrearch"-copy"
         else
-            mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )";       
-            echo "Este fichero se renombro con exito";
+            mv -i "$FILE" "$(dirname "$FILE")/"$nombrearch"";       
+            echo "Este fichero se renombro con exito a "$nombrearch"";
+         
         fi
+    echo "============"
 	cant=$((cant+=1));
 	echo "$cant" > ./valor.txt
     done
 else
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-    find -maxdepth 1 -type f -name '* *'  | while IFS=" " read -r FILE #NO RECURSIVO
+    #NO RECURSIVO
+    find -maxdepth 1 -type f -name '* *'  | while IFS=" " read -r FILE 
     do 
-        echo "Fichero:"
-        echo "$FILE"
-        if [[ -f "$(basename "$FILE"|tr -s [:space:] _ )" ]] 
+        echo "Fichero:"$FILE""
+        nombrearch="$(basename "$FILE"|tr -s [:space:] _ | sed -e 's/.$//')"  
+        if [[ -f $nombrearch ]] 
         then
             echo "El renombre de este fichero ya existe, se renombrara con  '-copy'"
-            mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )-copy";
-            echo "Este fichero se renombro con exito" 
+            mv -i "$FILE" "$(dirname "$FILE")/"$nombrearch"-copy";
+            echo "Este fichero se renombro con exito a "$nombrearch"-copy" ;
         else
-            mv -i "$FILE" "$(dirname "$FILE")/$(basename "$FILE"|tr -s [:space:] _ )"; 
-            echo "Este fichero se renombro con exito";
+            mv -i "$FILE" "$(dirname "$FILE")/"$nombrearch"";       
+            echo "Este fichero se renombro con exito a "$nombrearch"";
         fi
+    echo "============"
 	cant=$((cant+=1));
 	echo "$cant" > ./valor.txt
     done
