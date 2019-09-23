@@ -20,7 +20,7 @@
 var=$1
 
 LOCK="/var/lock/bkp.lock"
-trap 'rm -f $LOCK' INT
+#trap 'rm -f $LOCK' INT
 BKP_SH="./bkpd"
 
 help()
@@ -79,8 +79,7 @@ borrar()
 	dest=$(cat /tmp/dest.txt)
 	cd $dest
 	cant=$1
-	$dest
-	rm -f $(ls -1t | awk 'NR>'$cant)
+	rm -f $(ls -1t | awk 'NR>'$cant) 
 }
 
 contar()
@@ -151,10 +150,10 @@ case "$var" in
 		if [ ! -e $LOCK ]
 		then
 			echo "Se inicializa el demonio de backups."
-			trap "rm -f $LOCK; exit" INT TERM EXIT
+			#trap "rm -f $LOCK; exit" INT TERM EXIT
 			touch $LOCK
 			$BKP_SH "$2" "$3" $4 & echo $! >/tmp/bkp.pid 2>$1 < /dev/null #Ejecuto el backups llamando al archivo bkpd
-			trap - INT TERM EXIT
+			#trap - INT TERM EXIT
 		else
 			echo "Ya se está ejecutando el demonio de backups."
 			exit 1

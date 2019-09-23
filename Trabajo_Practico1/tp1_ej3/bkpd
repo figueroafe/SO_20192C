@@ -7,6 +7,6 @@ slp=$3
 while true 
 do
 	hh=`date +%Y-%m-%d-%T`
-	tar -czf $dest/bkp_$hh.tar.gz $orig > /dev/null 2>&1
 	sleep $slp 
+	tar -czf $dest/bkp_$hh.tar.gz $orig > /dev/null 2>&1
 done
