@@ -20,7 +20,6 @@
 var=$1
 
 LOCK="/var/lock/bkp.lock"
-#trap 'rm -f $LOCK' INT
 BKP_SH="./bkpd"
 
 help()
@@ -69,17 +68,31 @@ help()
 
 detener_demonio()
 {
-	cat /tmp/bkp.pid | awk '{print "kill -9 "$1}'|sh
-	>/tmp/bkp.pid
-	>/tmp/orig.txt
+	if test -s /tmp/bkp.pid; then
+		echo "Se detiene el demonio de backup."
+		cat /tmp/bkp.pid | awk '{print "kill -9 "$1}'|sh
+		rm -f $LOCK 		#Borro el archivo de lockeo previo a detener el demonio
+		>/tmp/bkp.pid
+		>/tmp/orig.txt
+	else
+		echo "Debe ejecutar el demonio de backups para realizar está acción."
+		echo "De necesitar ayudar ejecute ./ej_3.sh -h"
+		exit
+	fi
 }
 
 borrar()
 {
-	dest=$(cat /tmp/dest.txt)
-	cd $dest
-	cant=$1
-	rm -f $(ls -1t | awk 'NR>'$cant) 
+	if test -s /tmp/bkp.pid; then
+		dest=$(cat /tmp/dest.txt)
+		cd $dest
+		cant=$1
+		rm -f $(ls -1t | awk 'NR>'$cant) 
+	else
+		echo "Debe ejecutar el demonio de backups para realizar está acción."
+		echo "De necesitar ayudar ejecute ./ej_3.sh -h"
+		exit
+	fi
 }
 
 contar()
@@ -150,18 +163,14 @@ case "$var" in
 		if [ ! -e $LOCK ]
 		then
 			echo "Se inicializa el demonio de backups."
-			#trap "rm -f $LOCK; exit" INT TERM EXIT
 			touch $LOCK
 			$BKP_SH "$2" "$3" $4 & echo $! >/tmp/bkp.pid 2>$1 < /dev/null #Ejecuto el backups llamando al archivo bkpd
-			#trap - INT TERM EXIT
 		else
 			echo "Ya se está ejecutando el demonio de backups."
 			exit 1
 		fi
 		;;
 	stop )
-		echo "Se detiene el demonio de backup."
-		rm -f $LOCK 		#Borro el archivo de lockeo previo a detener el demonio
 		detener_demonio 	
 		;;
 	count )
