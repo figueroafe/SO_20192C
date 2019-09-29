@@ -4,7 +4,7 @@
 # Nombre Script: "ej_6.sh"
 # Numero Trabajo Practico: 1 
 # Numero Ejercicio: 6
-# Tipo: 1° Entrega
+# Tipo: 2° Entrega
 # Integrantes:
 #
 #		Nombre y Apellido                                 DNI
@@ -23,7 +23,7 @@
 
 Ayuda(){
 echo    
-echo "El script muestra los 10 subdirectorios mas grandes que se encuentran dentro del directorio suministrado"
+echo "El script muestra los 10 subdirectorios hojas mas grandes que se encuentran dentro del directorio suministrado"
 echo "Parametro path de carpeta a analizar ej /Oracle/client1/diag/Trace"
 echo
 echo "Ej: ./script.sh /Oracle/client1/diag/Trace"
@@ -35,11 +35,13 @@ echo
 # Verificacion de parametros
 
 param="mal";
-if (( $# == 0 ))
+
+if [ $# -eq 0 -o $# -gt 1 ]
 then
     param="-nada";
     echo
-    echo "Parametros insuficientes"
+    echo "Cantidad de Parametros incorrecta"
+    echo
     Ayuda
     exit
 else
@@ -50,15 +52,21 @@ else
     fi
 
 
-    if [ -d "$(dirname "$1")" ]
+    if [ -d "$1" ]
     then
-        if [ ! -r "$(dirname "$1")" ]
+        if [ ! -r "$1" ]
         then
             echo " El directorio indicado no tiene permiso de lectura. "
             exit
+        else
+            if [ $(du "$1" | cut -f1) -eq 0 ]
+            then
+                echo " El directorio indicado se encuentra vacio. "
+                exit
+            fi
         fi
     else
-        echo "La ruta: "$(dirname "$1")" "
+        echo "La ruta: "$1" "
         echo
         echo "No es valida"
         exit
@@ -76,7 +84,7 @@ vwsubd=()
 
 readarray vect1 <<< "$(find "$path" -maxdepth 1 -mindepth 1  -type d)"
 
-readarray vect2 <<< "$(du -kx -d 1 "$path" | sort -rn | head -n 11 |cut -f2)"
+readarray vect2 <<< "$(du -kx -d 1 "$path" | sort -rn | cut -f2)"
 
 for i in "${vect1[@]}"; do
 
@@ -93,18 +101,25 @@ done
 echo "Directorio           Cant Archivos"
 echo
 
-for j in "${vect2[@]}"; do
+conta=0
 
-    for h in "${vwsubd[@]}";do
+while [ $conta -lt 10 ]; do
 
-    if [ "$j" == "$h" ];
-    then
-        tmp=$(echo "$h" | cut -d$'\n' -f1)
-        cant=$(find "$tmp" -type f | wc -l)
-    
-        echo "$tmp"   "  $cant"  "arch"
-    
-    fi    
+    for j in "${vect2[@]}"; do
+
+        for h in "${vwsubd[@]}";do
+
+        if [ "$j" == "$h" ];
+        then
+            tmp=$(echo "$h" | cut -d$'\n' -f1)
+            tam=$(du -h "$tmp" | cut -f1)
+            cant=$(find "$tmp" -type f | wc -l)
+            conta+=1
+            echo "$tmp"   "  $tam"  "  $cant"  "arch"
+
+        fi    
+
+        done
 
     done
 
