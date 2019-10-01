@@ -71,7 +71,11 @@ else
 	lcomentarios=0
 	cantFicheros=`wc -l "/tmp/resultados" | awk '{print $1}'`;
 	ltotales=0
-
+	if test $cantFicheros -eq "0"; then 
+	echo "No se encontraron ficheros con esa extension"
+	echo
+	echo
+	else
 	while IFS= read -r line
 	do
 		awk -f analisis.awk "$line";	#genera los 2 ficheros que uso para sumar en las siguientes 2 lineas
@@ -96,5 +100,6 @@ else
 	rm "/tmp/resultados"
 	rm "/tmp/cod.txt"
 	rm "/tmp/com.txt"
+	fi
 fi
 
