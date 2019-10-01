@@ -2,7 +2,7 @@
 # Nombre Script: "ej_3.sh"
 # Numero Trabajo Practico: 1 
 # Numero Ejercicio: 3
-# Tipo: 1° Entrega
+# Tipo: 2° Entrega
 # Integrantes:
 #
 #		Nombre y Apellido                                 DNI
