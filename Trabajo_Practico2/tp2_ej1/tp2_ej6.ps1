@@ -45,6 +45,11 @@ elseif($Producto -ne -999) {
     }
     else {
         Write-Host "Realizando el producto, por favor espere..."
+        $Matriz1 = Get-Content $Entrada
+        $CantFilas = $Matriz1.count
+        Write-Host "La cantidad de filas de la matriz es: $CantFilas"
+        $Matriz1 = $Matriz1.Split("|")
+        Write-Host "$Matriz1"
         Write-Host "El Producto escalar se ha realizado exitosamente!"
     }
 }
