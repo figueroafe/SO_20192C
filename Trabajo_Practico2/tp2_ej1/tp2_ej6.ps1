@@ -45,11 +45,32 @@ elseif($Producto -ne -999) {
     }
     else {
         Write-Host "Realizando el producto, por favor espere..."
-        $Matriz1 = Get-Content $Entrada
-        $CantFilas = $Matriz1.count
-        Write-Host "La cantidad de filas de la matriz es: $CantFilas"
-        $Matriz1 = $Matriz1.Split("|")
-        Write-Host "$Matriz1"
+        $Matriz1 = @(Get-Content $Entrada)
+        $filas = $Matriz1.count
+        $columnas = $Matriz1[0].Split("|").Length
+        $Matriz1 = @($Matriz1.Split("|")) 
+      #  $array = @()#New-Object System.Collections.ArrayList
+        Remove-Item salida.matriz1.txt
+        New-Item salida.matriz1.txt | Out-Null
+        $pos = 0;
+        for ($i = 0; $i -lt $filas; $i++) {
+            
+            for ($j = 0; $j -lt $columnas; $j++) {
+                [int]$res = [int]$Matriz1[$pos] * $Producto 
+                 #$array.Add($res)
+                 if($j -eq $columnas-1){
+                    $array += "$res"
+                 }
+                 else {
+                    $array += "$res|"
+                 }
+                 $pos++;                 
+             }
+             Write-Host $array
+             Write-Output $array >> salida.matriz1.txt
+             $array = ""
+        }
+        
         Write-Host "El Producto escalar se ha realizado exitosamente!"
     }
 }
