@@ -1,3 +1,25 @@
+
+#-----------------------Inicio Encabezado------------------------------##
+# Nombre Script: "tp2_ej6.ps1"
+# Numero Trabajo Practico: 2 
+# Numero Ejercicio: 6
+# Tipo: 1° Entrega
+# Integrantes:
+#
+#		Nombre y Apellido                                 DNI
+#		---------------------                           ----------
+#       Francisco Figueroa	                            32.905.374
+#       Adrian Morel		                            34.437.202
+#       Sergio Salas                                    32.090.753                 
+#       Fernando Sanchez	 		                	36.822.171
+#       Sabrina Tejada			       	     			37.790.024
+#
+##-----------------------Fin del Encabezado-----------------------------##
+
+
+
+
+
 <#
     .Synopsis
     Script creado para realizar el producto escalar de una matriz
