@@ -56,7 +56,7 @@ else{
 # Quedaría de la siguiente forma:
 #
 # Param   (
-#    [Parameter(Position = 1, Mandatory = $false)]
+#    [Parameter(Position = 1, Mandatory = $true)]
 #    [String] $pathsalida = "./procesos.txt ",
 #    [Parameter(Position = 2, Mandatory = $false)]
 #    [int] $cantidad = 3
