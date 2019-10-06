@@ -37,54 +37,68 @@ if($file_exits -ne $true){
 
 
 
-#switch ($comdesinf) {
-#	"Descomprimir"	{ Add-Type -Assembly 'System.IO.Compression.FileSystem'
-#						[System.IO.Compression.ZipFile]::ExtractToDirectory($pathzip, $directorio); break}
-#	"Comprimir" 	{ Add-Type -Assembly 'System.IO.Compression.FileSystem'
-#						[System.IO.Compression.ZipFile]::CreateFromDirectory($pathzip, $directorio); break}
-#	"Informar"		{break}
-#	Default {"Opciones erroneas"; break}
-#}
-
-add-Type -AssemblyName system.io.compression.filesystem
-try{
-	$RawZips = [io.compression.ZipFile]::OpenRead($pathzip).Entries
-}catch{
-	Write-Host "El archivo de entrada no existe. Ultice la opcion Get-Help para ver la ayuda del script."
-	exit;
-}	
-
-$ObjArray = @();
-foreach($RawZip in $RawZips){
-	$comprimido=($RawZip.CompressedLength/1KB).ToString(00);
-	$original=00;
-	if($RawZip.Length -gt 0){
-		$original=($RawZip.Length/1KB).ToString(00);
+switch ($comdesinf) 
+{
+	-Descomprimir	
+	{
+		Add-Type -Assembly 'System.IO.Compression.FileSystem'
+		[System.IO.Compression.ZipFile]::ExtractToDirectory($pathzip, $directorio)
 	}
-	
-	$object = New-Object psobject
-	$object | Add-Member -MemberType NoteProperty -Name Nombre_Archivo($RawZip.Name)
-	$orig=($original/1024).ToString()+" MB";
-	$object | Add-Member -MemberType NoteProperty -Name Tamaño_Original($orig)
-	$compri=($comprimido/1024).ToString()+" MB",
-	$object | Add-Member -MemberType NoteProperty -Name Tamaño_Comprimido($compri)
+	-Comprimir
+	{
+		Add-Type -Assembly 'System.IO.Compression.FileSystem'
+		[System.IO.Compression.ZipFile]::CreateFromDirectory($pathzip, $directorio)
+	-Informar
+	{
+		add-Type -AssemblyName system.io.compression.filesystem
+		try{
+			$RawZips = [io.compression.ZipFile]::OpenRead($pathzip).Entries
+		}catch{
+			Write-Host "El archivo de entrada no existe. Ultice la opcion Get-Help para ver la ayuda del script."
+			exit;
+		}	
 
-	#valido que no se divida por cero
-	$notzero=0;
-	try{
-		$notzero=$comprimido/$original;
-	}catch{
-		$divido_cero=1;
+		$ObjArray = @();
+		foreach($RawZip in $RawZips){
+			$comprimido=($RawZip.CompressedLength/1KB).ToString(00);
+			$original=00;
+			if($RawZip.Length -gt 0){
+				$original=($RawZip.Length/1KB).ToString(00);
+			}
+			
+			$object = New-Object psobject
+			$object | Add-Member -MemberType NoteProperty -Name Nombre_Archivo($RawZip.Name)
+			$orig=($original/1024).ToString()+" MB";
+			$object | Add-Member -MemberType NoteProperty -Name Tamaño_Original($orig)
+			$compri=($comprimido/1024).ToString()+" MB",
+			$object | Add-Member -MemberType NoteProperty -Name Tamaño_Comprimido($compri)
+		
+			#valido que no se divida por cero
+			$notzero=0;
+			try{
+				$notzero=$comprimido/$original;
+			}catch{
+				$divido_cero=1;
+			}
+			#Muestro la relación con 2 decimales
+			$object | Add-Member NoteProperty Relación($notzero.ToString("0.00"))
+			if($RawZip.Name -and $original){
+				$ObjArray += $object
+			}
+		}
+		
+		#Imprimo
+		$ObjArray | Format-Table
+
 	}
-	#Muestro la relación con 2 decimales
-	$object | Add-Member NoteProperty Relación($notzero.ToString("0.00"))
-	if($RawZip.Name -and $original){
-		$ObjArray += $object
+	Default
+	{
+		Write-Host "Opciones erroneas"; 
+		break
 	}
 }
 
-#Imprimo
-$ObjArray | Format-Table
+
 
 
 
