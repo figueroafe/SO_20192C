@@ -8,7 +8,8 @@
     en un tercer archivo de texto. También puede calcular el producto escalar de
     una matriz pasando un escalar por parámetro.
     .Example
-    ejemplo 1
+    ./tp2_ej6.ps1 -Producto 5
+    ./tp2_ej6.ps1 -Suma /home/user/Escritorio/Matriz2.txt
     .Inputs
     inputs aqui
     .Outputs
@@ -27,9 +28,9 @@ Param
 [string] $Suma = "vacio"
 )
 
-
 $path = Test-Path "$Entrada"
 $path2 = Test-Path "$Suma"
+$NombreArchivo = $Entrada.Substring($Entrada.LastIndexOf("/")+1)
 if($Entrada -eq "vacio"){
     Write-Host "Imposible continuar - No se ingresó el origen de la matriz"
 }
@@ -50,8 +51,15 @@ elseif($Producto -ne -999) {
         $columnas = $Matriz1[0].Split("|").Length
         $Matriz1 = @($Matriz1.Split("|")) 
       #  $array = @()#New-Object System.Collections.ArrayList
-        Remove-Item salida.matriz1.txt
-        New-Item salida.matriz1.txt | Out-Null
+        $salida = Test-Path "salida.$NombreArchivo"
+        if($salida -eq $true){
+            Remove-Item "salida.$NombreArchivo" | Out-Null
+            New-Item "salida.$NombreArchivo" | Out-Null
+        }
+        else {
+            New-Item "salida.$NombreArchivo" | Out-Null
+        }
+        
         $pos = 0;
         for ($i = 0; $i -lt $filas; $i++) {
             
@@ -67,7 +75,7 @@ elseif($Producto -ne -999) {
                  $pos++;                 
              }
              Write-Host $array
-             Write-Output $array >> salida.matriz1.txt
+             Write-Output $array >> "salida.$NombreArchivo"
              $array = ""
         }
         
@@ -83,9 +91,14 @@ elseif($Suma -ne "vacio"){
         $Matriz1 = @($Matriz1.Split("|")) 
         $Matriz2 = @(Get-Content $Suma)
         $Matriz2 = @($Matriz2.Split("|")) 
-
-        Remove-Item salida.matriz1.txt
-        New-Item salida.matriz1.txt | Out-Null
+        $salida = Test-Path "salida.$NombreArchivo"
+        if($salida -eq $true){
+            Remove-Item "salida.$NombreArchivo" | Out-Null
+            New-Item "salida.$NombreArchivo" | Out-Null
+        }
+        else {
+            New-Item "salida.$NombreArchivo" | Out-Null
+        }
         $pos = 0;
         for ($i = 0; $i -lt $filas; $i++) {
             
@@ -100,7 +113,7 @@ elseif($Suma -ne "vacio"){
                  $pos++;                 
              }
              Write-Host $array
-             Write-Output $array >> salida.matriz1.txt
+             Write-Output $array >> "salida.$NombreArchivo"
              $array = ""
         }
         Write-Host "El Suma de Matrices se ha realizado exitosamente!"
