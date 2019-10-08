@@ -8,26 +8,32 @@
     en un tercer archivo de texto. También puede calcular el producto escalar de
     una matriz pasando un escalar por parámetro.
     .Example
-    ./tp2_ej6.ps1 -Producto 5
-    ./tp2_ej6.ps1 -Suma /home/user/Escritorio/Matriz2.txt
+    ./tp2_ej6.ps1 -Entrada ~/Escritorio/matriz.txt -Producto 5
+    ./tp2_ej6.ps1 -Entrada ~/Escritorio/matriz.txt -Suma /home/user/Escritorio/Matriz2.txt
     .Inputs
     inputs aqui
     .Outputs
     outputs aqui
     .Notes
-    notas aqui
+
 #>
 
 Param
 (
 [Parameter(Position = 1, Mandatory = $false)]
 [string] $Entrada = "vacio",
-[Parameter(Position = 2, Mandatory = $false<#, ParameterSetName = 'Producto'#>)]
+[Parameter(Position = 2, Mandatory = $false, ParameterSetName = 'Producto')]
 [int] $Producto = -999,
-[Parameter(Position = 3, Mandatory = $false<#, ParameterSetName = 'Suma'#>)]
+[Parameter(Position = 3, Mandatory = $false, ParameterSetName = 'Suma')]
 [string] $Suma = "vacio"
 )
 
+Write-Host "Procesando..."
+for ($i = 0; $i -lt 5; $i++) {
+    Start-Sleep -Seconds 0.2
+    Write-Host("#")
+    
+}
 $path = Test-Path "$Entrada"
 $path2 = Test-Path "$Suma"
 $NombreArchivo = $Entrada.Substring($Entrada.LastIndexOf("/")+1)
@@ -64,7 +70,7 @@ elseif($Producto -ne -999) {
         for ($i = 0; $i -lt $filas; $i++) {
             
             for ($j = 0; $j -lt $columnas; $j++) {
-                [int]$res = [int]$Matriz1[$pos] * $Producto 
+                [float]$res = [float]$Matriz1[$pos] * $Producto 
                  #$array.Add($res)
                  if($j -eq $columnas-1){
                     $array += "$res"
@@ -103,7 +109,7 @@ elseif($Suma -ne "vacio"){
         for ($i = 0; $i -lt $filas; $i++) {
             
             for ($j = 0; $j -lt $columnas; $j++) {
-                [int]$res = [int]$Matriz1[$pos] + [int]$Matriz2[$pos] 
+                [float]$res = [float]$Matriz1[$pos] + [float]$Matriz2[$pos] 
                  if($j -eq $columnas-1){
                     $array += "$res"
                  }
