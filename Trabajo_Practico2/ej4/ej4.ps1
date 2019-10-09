@@ -1,19 +1,29 @@
+<#
+	.Synopsis
+	Script creado para realizar la compresión y descompresión de directorios,
+	tambien informa el contenido de los archivos con extensión .zip
+	.Description
+	El script es llamado indicando los directorios de origen y destino para realizar
+	la compresión o descompresión de los archivos
+	.Example
+	./ej4.ps1 -pathzip C:\user\docs -directorio C:\destino\docs.zip -comprimir
+	./ej4.ps1 -pathzip C:\destino\docs.zip -directorio C:\user\docs -descomprimir
+	./ej4.ps1 -pathzip C:\destino\docs.zip -informar
+#>
+
 Param (
 	[Parameter(Position=0,Mandatory=$true)]
 	[string]$pathzip,
 	
 	[Parameter(Mandatory=$false)]
-	[string]$directorio
+	[string]$directorio,
 	
-	#[Parameter(Mandatory=$true,ParameterSetName='Descomprimir')]
-	#[Parameter(Mandatory=$true,ParameterSetName='Comprimir')]
-	#[Parameter(Mandatory=$true,ParameterSetName='Informar')]
-	#[switch]$comdesinf
-	
-	#[Parameter(Position=2,Mandatory=$true,ParameterSetName='Descomprimir')]
-	#[Parameter(Position=2,Mandatory=$true,ParameterSetName='Comprimir')]
-	#[Parameter(Position=2,Mandatory=$true,ParameterSetName='Informar')]
-	#[switch]$comdesinf
+	[Parameter(Mandatory=$true,ParameterSetName='Descomprimir')]
+	[switch]$descomprimir,
+	[Parameter(Mandatory=$true,ParameterSetName='Comprimir')]
+	[switch]$comprimir,
+	[Parameter(Mandatory=$true,ParameterSetName='Informar')]
+	[switch]$informar
 )
 
 $file_exits = Test-Path $pathzip;
@@ -22,45 +32,37 @@ if($file_exits -ne $true){
 	exit;
 }
 
-	
-#Write-Host "Mostrar $pathzip y $directorio"
-
-#Add-Type -AssemblyName 'system.io.compression.filesystem'
-#[System.IO.Compression.ZipFile]::CreateFromDirectory($pathzip, $directorio) 
-
-#if($comdesinf -eq 'Descomprimir')
-#{
-#	Add-Type -Assembly 'System.IO.Compression.FileSystem'
-#	[System.IO.Compression.ZipFile]::ExtractToDirectory($pathzip, $directorio)
-#
-#}
+if($comprimir -eq 'comprimir'){
+	Add-Type -Assembly 'System.IO.Compression.FileSystem'
+	[System.IO.Compression.ZipFile]::CreateFromDirectory($pathzip, $directorio)
+}
+else {
+	Write-Host "Parametro invalido. Para obtener ayuda ejecute get-help ej4.ps1"
+	exit;
+}
 
 
+if($descomprimir -eq 'descomprimir'){
+	Add-Type -Assembly 'System.IO.Compression.FileSystem'
+	[System.IO.Compression.ZipFile]::ExtractToDirectory($pathzip, $directorio,$true)
+}
+else {
+	Write-Host "Parametro invalido. Para obtener ayuda ejecute get-help ej4.ps1"
+	exit;
+}
 
-switch ($comdesinf) 
-{
-	-Descomprimir	
-	{
-		Add-Type -Assembly 'System.IO.Compression.FileSystem'
-		[System.IO.Compression.ZipFile]::ExtractToDirectory($pathzip, $directorio)
-	}
-	-Comprimir
-	{
-		Add-Type -Assembly 'System.IO.Compression.FileSystem'
-		[System.IO.Compression.ZipFile]::CreateFromDirectory($pathzip, $directorio)
-	-Informar
-	{
-		add-Type -AssemblyName system.io.compression.filesystem
+if($informar -eq 'informar'){
+	add-Type -AssemblyName system.io.compression.filesystem
 		try{
 			$RawZips = [io.compression.ZipFile]::OpenRead($pathzip).Entries
 		}catch{
 			Write-Host "El archivo de entrada no existe. Ultice la opcion Get-Help para ver la ayuda del script."
 			exit;
 		}	
-
+		#Utilizo un array para filtrar las opciones de read command
 		$ObjArray = @();
 		foreach($RawZip in $RawZips){
-			$comprimido=($RawZip.CompressedLength/1KB).ToString(00);
+			$comprimido=($RawZip.CompressedLength/1KB).ToString(00); #Divido el total por 1KB
 			$original=00;
 			if($RawZip.Length -gt 0){
 				$original=($RawZip.Length/1KB).ToString(00);
@@ -89,17 +91,8 @@ switch ($comdesinf)
 		
 		#Imprimo
 		$ObjArray | Format-Table
-
-	}
-	Default
-	{
-		Write-Host "Opciones erroneas"; 
-		break
-	}
 }
-
-
-
-
-
-
+else {
+	Write-Host "Parametro invalido. Para obtener ayuda ejecute get-help ej4.ps1"
+	exit;
+}
