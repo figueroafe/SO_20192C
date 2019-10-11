@@ -22,36 +22,64 @@ Param (
 	[switch]$descomprimir,
 	[Parameter(Mandatory=$true,ParameterSetName='Comprimir')]
 	[switch]$comprimir,
-	[Parameter(Mandatory=$true,ParameterSetName='Informar')]
+	[Parameter(Mandatory=$true,ParameterSetName='informar')]
 	[switch]$informar
 )
 
 $file_exits = Test-Path $pathzip;
+
 if($file_exits -ne $true){
 	Write-Host "El archivo de entrada no existe. Ultice la opcion Get-Help para ver la ayuda del script."
 	exit;
 }
 
-if($comprimir -eq 'comprimir'){
+if( ($PSBoundParameters.Count -lt 2) -or ($PSBoundParameters.Count -lt 3) ){
+	Write-Host ""
+	Write-Host "La cantidad de parametros es invalidad, ejecute el comando get-help para ver la ayuda."
+
+	exit;
+}
+if($comprimir.IsPresent -and $descomprimir.IsPresent){
+	Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
+	exit
+}
+
+if($comprimir.IsPresent -and $informar.IsPresent){
+	Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
+	exit
+}
+
+if($descomprimir.IsPresent -and $informar.IsPresent){
+	Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
+	exit
+}
+
+if($comprimir.IsPresent){
+	
+	$valid_path = Test-Path $directorio;
+	if($valid_path -ne $true){
+		Write-Host "El directorio indicado no existe. Ultice la opcion Get-Help para ver la ayuda del script."
+		exit;
+	}
+
+
 	Add-Type -Assembly 'System.IO.Compression.FileSystem'
 	[System.IO.Compression.ZipFile]::CreateFromDirectory($pathzip, $directorio)
 }
-else {
-	Write-Host "Parametro invalido. Para obtener ayuda ejecute get-help ej4.ps1"
-	exit;
-}
 
+if($descomprimir.IsPresent){
 
-if($descomprimir -eq 'descomprimir'){
+	$valid_path = Test-Path $directorio;
+	if($valid_path -ne $true){
+		Write-Host "El directorio indicado no existe. Ultice la opcion Get-Help para ver la ayuda del script."
+		exit;
+	}
+
 	Add-Type -Assembly 'System.IO.Compression.FileSystem'
 	[System.IO.Compression.ZipFile]::ExtractToDirectory($pathzip, $directorio,$true)
 }
-else {
-	Write-Host "Parametro invalido. Para obtener ayuda ejecute get-help ej4.ps1"
-	exit;
-}
 
-if($informar -eq 'informar'){
+if($informar.IsPresent){
 	add-Type -AssemblyName system.io.compression.filesystem
 		try{
 			$RawZips = [io.compression.ZipFile]::OpenRead($pathzip).Entries
