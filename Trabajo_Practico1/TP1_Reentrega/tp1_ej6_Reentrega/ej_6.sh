@@ -59,7 +59,7 @@ else
             echo " El directorio indicado no tiene permiso de lectura. "
             exit
         else
-            if [ $(du "$1" | cut -f1) -eq 0 ]
+            if [ ! "$(ls -A "$1")" ]
             then
                 echo " El directorio indicado se encuentra vacio. "
                 exit
