@@ -10,12 +10,6 @@
     .Example
     ./tp2_ej6.ps1 -Entrada ~/Escritorio/matriz.txt -Producto 5
     ./tp2_ej6.ps1 -Entrada ~/Escritorio/matriz.txt -Suma /home/user/Escritorio/Matriz2.txt
-    .Inputs
-    inputs aqui
-    .Outputs
-    outputs aqui
-    .Notes
-
 #>
 
 Param
@@ -37,13 +31,10 @@ function procesar(){
 }
 
 function ProductoEscalar(){
-    Write-Host "Realizando el producto, por favor espere..."
-    procesar
     $Matriz1 = @(Get-Content $Entrada)
     $filas = $Matriz1.count
     $columnas = $Matriz1[0].Split("|").Length
     $Matriz1 = @($Matriz1.Split("|")) 
-  #  $array = @()#New-Object System.Collections.ArrayList
     $salida = Test-Path "salida.$NombreArchivo"
     if($salida -eq $true){
         Remove-Item "salida.$NombreArchivo" | Out-Null
@@ -70,14 +61,9 @@ function ProductoEscalar(){
          Write-Output $array >> "salida.$NombreArchivo"
          $array = ""
     }
-    
-    Write-Host "El Producto escalar se ha realizado exitosamente!"
-    
 }
 
 function SumarMatrices(){
-    Write-Host "Realizando la suma, por favor espere..."
-    procesar
     $Matriz1 = @(Get-Content $Entrada)
     $filas = $Matriz1.count
     $columnas = $Matriz1[0].Split("|").Length
@@ -108,11 +94,8 @@ function SumarMatrices(){
          Write-Output $array >> "salida.$NombreArchivo"
          $array = ""
     }
-    Write-Host "El Suma de Matrices se ha realizado exitosamente!"
 }
 
-Write-Host "Procesando..."
-procesar
 $path = Test-Path "$Entrada"
 $path2 = Test-Path "$Suma"
 $NombreArchivo = $Entrada.Substring($Entrada.LastIndexOf("/")+1)
@@ -126,12 +109,7 @@ elseif($Producto -eq -999 -and $Suma -eq "vacio"){
     Write-Host "Imposible continuar - No se ingresó una operacion"
 }
 elseif($Producto -ne -999) {
-    if($Producto -lt 0){
-        Write-Host "El escalar es inválido, debe ser un número natural"
-    }
-    else {
         ProductoEscalar
-    }
 }
 elseif($Suma -ne "vacio"){
     if($path2 -eq $true){
