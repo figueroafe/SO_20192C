@@ -1,12 +1,16 @@
 <#
     .Synopsis
-    Script creado para realizar el producto escalar de una matriz
+    Script creado para calcular el producto escalar de una matriz
     o la suma entre 2 matrices.
     .Description
-    El Script se utiliza para realizar la suma de 
-    2 matrices pasadas por parámetro en archivos de texto; devolviendo el resultado
-    en un tercer archivo de texto. También puede calcular el producto escalar de
-    una matriz pasando un escalar por parámetro.
+    El Script tiene 2 funcionalidades: realizar la suma de dos matrices o el producto escalar
+    de una matriz. Para realizar la suma de dos matrices se deben enviar por parametro los paths
+    absolutos o relativos de ambas matrices, siendo la primera matriz la de entrada y la segunda 
+    la matriz a sumarle. Para el producto escalar se debe ingresar el path de la matriz de entrada
+    y el escalar. Para ambas funcionalidades, se genera un archivo de texto con el nombre 
+    salida.nombrematrizentrada.txt en el mismo directorio donde se encuentra la matriz de entrada
+    con el resultado obtenido. Recuerde que si utiliza directorios que contiene espacios en el nombre
+    debe ingresarlos con "".
     .Example
     ./tp2_ej6.ps1 -Entrada ~/Escritorio/matriz.txt -Producto 5
     ./tp2_ej6.ps1 -Entrada ~/Escritorio/matriz.txt -Suma /home/user/Escritorio/Matriz2.txt
