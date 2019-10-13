@@ -22,9 +22,18 @@ Param
 [string] $Entrada = "vacio",
 [Parameter(Position = 2, Mandatory = $false, ParameterSetName = 'Producto')]
 [int] $Producto = -999,
-[Parameter(Position = 3, Mandatory = $false, ParameterSetName = 'Suma')]
+[Parameter(Position = 2, Mandatory = $false, ParameterSetName = 'Suma')]
 [string] $Suma = "vacio"
 )
+
+
+if(($PSBoundParameters.Count -lt 2) -or ($PSBoundParameters.Count -gt 2)){ #Valida cantidad de parámetros.
+    Write-Host ""
+    Write-Host "La cantidad de parámetros es incorrecta, consulte la ayuda con el comando Get-Help."
+    Write-Host ""
+    Exit
+}
+
 
 function ProductoEscalar(){
     $Matriz1 = @(Get-Content $Entrada)
