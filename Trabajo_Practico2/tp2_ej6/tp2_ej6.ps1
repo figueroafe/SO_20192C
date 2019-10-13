@@ -26,14 +26,6 @@ Param
 [string] $Suma = "vacio"
 )
 
-function procesar(){
-    for ($i = 0; $i -lt 3; $i++) {
-        Start-Sleep -Seconds 0.2
-        Write-Host("#")
-        
-    }
-}
-
 function ProductoEscalar(){
     $Matriz1 = @(Get-Content $Entrada)
     $filas = $Matriz1.count
@@ -52,8 +44,7 @@ function ProductoEscalar(){
     for ($i = 0; $i -lt $filas; $i++) {
         
         for ($j = 0; $j -lt $columnas; $j++) {
-            [float]$res = [float]$Matriz1[$pos] * $Producto 
-             #$array.Add($res)
+            [double]$res = [double]$Matriz1[$pos] * $Producto 
              if($j -eq $columnas-1){
                 $array += "$res"
              }
@@ -86,7 +77,7 @@ function SumarMatrices(){
     for ($i = 0; $i -lt $filas; $i++) {
         
         for ($j = 0; $j -lt $columnas; $j++) {
-            [float]$res = [float]$Matriz1[$pos] + [float]$Matriz2[$pos] 
+            [float]$res = [double]$Matriz1[$pos] + [double]$Matriz2[$pos] 
              if($j -eq $columnas-1){
                 $array += "$res"
              }
