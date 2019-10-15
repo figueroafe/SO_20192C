@@ -1,0 +1,10 @@
+Estimado Profesor:
+
+Enviamos un email a Fernando Piubel comentando que no habíamos 
+logrado encontrar los errores marcados en la reentrega 1 para el ejercicio 4. El profesor Fernando lo probó y nos indicó que no debemos hacerle ninguna modificación puesto que funciona correctamente; sí me señaló que quizás la confusión pudo haber estado en que los mensajes de error que arrojamos en el script fueron
+un tanto genéricos o no dan tanta claridad de cuál es el error.
+Tendremos en cuenta esto para futuras reentregas. Por eso enviamos el ej 4
+nuevamente sin ninguna modificación y con la nota aclaratoria adjunta que el mismo Fernando nos indicó que enviemos.
+
+Un saludo.
+
