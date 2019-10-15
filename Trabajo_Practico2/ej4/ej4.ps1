@@ -39,10 +39,17 @@ if( ($PSBoundParameters.Count -lt 2) -or ($PSBoundParameters.Count -lt 3) ){
 
 	exit;
 }
-if($comprimir.IsPresent -and $descomprimir.IsPresent){
-	Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
-	exit
+try{
+	if($comprimir.IsPresent -and $descomprimir.IsPresent){
+		Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
+		exit
+	}
 }
+catch{
+	Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
+		exit
+}
+
 
 if($comprimir.IsPresent -and $informar.IsPresent){
 	Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
