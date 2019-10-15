@@ -1,17 +1,17 @@
 
 <#
     .Synopsis
-    Este script informa cuáles de los procesos que se encuentran corriendo en el sistema y tienen más 
+    Este script informa cuáles de los procesos que se encuentran corriendo en el sistema y tienen mas 
     de una determinada cantidad de instancias. 
-    La salida del script debe ser únicamente un listado de los nombres de los procesos que tienen 
+    La salida del script debe ser unicamente un listado de los nombres de los procesos que tienen 
     más de “-Cantidad” instancias, sin encabezados ni otro texto adicional.
 
     .Description
-    -Cantidad: Este parámetro debe ser obligatorio y mayor a 1. Indicará la cantidad mínima de 
+    -Cantidad: Este parámetro debe ser obligatorio y mayor a 1. Indicara la cantidad minima de 
     instancias que debe tener un proceso para ser reportado
    
     .Example
-        .\Ejercicio2  -Cantidad 5
+        .\tp2_ej2.ps1  -Cantidad 5
         postgres
         Code
         svchost
@@ -22,7 +22,7 @@
         MicrosoftEdgeCP
         
     .Example
-        .\Ejercicio2 5
+        .\tp2_ej2.ps1 5
         postgres
         Code
         svchost
@@ -39,7 +39,7 @@ Param (
 
 if($Cantidad -le 1)
 {
-    Write-Host "Cantidad de parametros incorrecto. Ejecute la ayuda del script para mas informacion."
+    Write-Host "Parametros incorrecto. Debe ser mayor a 1. Ejecute la ayuda del script para mas informacion."
     exit
 }else{
     $lista_procesos = Get-Process | Select-Object ProcessName
