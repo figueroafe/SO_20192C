@@ -26,31 +26,6 @@ Param (
 	[switch]$informar
 )
 
-$file_exits = Test-Path $pathzip;
-
-if($file_exits -ne $true){
-	Write-Host "El archivo de entrada no existe. Ultice la opcion Get-Help para ver la ayuda del script."
-	exit;
-}
-
-if( ($PSBoundParameters.Count -lt 2) -or ($PSBoundParameters.Count -lt 3) ){
-	Write-Host ""
-	Write-Host "La cantidad de parametros es invalidad, ejecute el comando get-help para ver la ayuda."
-
-	exit;
-}
-try{
-	if($comprimir.IsPresent -and $descomprimir.IsPresent){
-		Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
-		exit
-	}
-}
-catch{
-	Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
-		exit
-}
-
-
 if($comprimir.IsPresent -and $informar.IsPresent){
 	Write-Host "Acción no permitida, de necesitar ayuda ejecute el comando get-help"
 	exit
@@ -63,27 +38,45 @@ if($descomprimir.IsPresent -and $informar.IsPresent){
 
 if($comprimir.IsPresent){
 	
+	#consulto si existe el directorio de destino
 	$valid_path = Test-Path $directorio;
 	if($valid_path -ne $true){
 		Write-Host "El directorio indicado no existe. Ultice la opcion Get-Help para ver la ayuda del script."
 		exit;
 	}
 
-
+	$fecha=$(Get-Date -UFormat "%Y%m%d")
 	Add-Type -Assembly 'System.IO.Compression.FileSystem'
-	[System.IO.Compression.ZipFile]::CreateFromDirectory($pathzip, $directorio)
+	[System.IO.Compression.ZipFile]::CreateFromDirectory("$pathzip", "$directorio" + '\' + $fecha + '.zip')
+	exit;
 }
 
 if($descomprimir.IsPresent){
 
+	#Consulto si existe el archivo a descomprimir
+	$file_exits = Test-Path $pathzip;
+	if($file_exits -ne $true){
+		Write-Host "El archivo de entrada no existe. Ultice la opcion Get-Help para ver la ayuda del script."
+		exit;
+	}
+	
+	#consulto si existe el directorio donde voy a descomprimir el archivo zip
 	$valid_path = Test-Path $directorio;
 	if($valid_path -ne $true){
 		Write-Host "El directorio indicado no existe. Ultice la opcion Get-Help para ver la ayuda del script."
 		exit;
 	}
+	
+	#consulto por si hay contenido en el archivo zip
+	$contenido = Get-ChildItem $directorio | Measure-Object
+	if($contenido.Count -ne 0){
+		Write-Host "Revisar el directorio de destino. El directorio debe estar vacio para realizar esta accion."
+		exit;
+	}
 
 	Add-Type -Assembly 'System.IO.Compression.FileSystem'
-	[System.IO.Compression.ZipFile]::ExtractToDirectory($pathzip, $directorio,$true)
+	[System.IO.Compression.ZipFile]::ExtractToDirectory($pathzip, $directorio)
+	exit;
 }
 
 if($informar.IsPresent){
