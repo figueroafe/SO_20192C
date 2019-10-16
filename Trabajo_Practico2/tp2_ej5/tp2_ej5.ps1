@@ -19,7 +19,7 @@
 <#
     .Synopsis
      El script muestra cada cierta cantidad de tiempo la cantidad de procesos que se 
-     encuentran en ejecución en ese momento o el tamaño de un directorio.
+     encuentran en ejecución en ese momento o el tamaño de un directorio indicado.
 
     .Description
      El script cuenta con los siguientes parámetros:
@@ -33,20 +33,39 @@
 
     ACLARACIONES
 
-    -Al ejecutar el script se mostrará lo solicitado cada 5 segundos hasta que se detenga.
+    -Al ejecutar el script se mostrará lo solicitado cada 10 segundos hasta que se detenga.
     
     -Solo se permite realizar una acción a la vez, es decir, se puede consultar la cantidad
      de procesos en ejecución o el peso del directorio indicado.
 
-    -El peso de los archivos está indicado en bytes (ver nota al pie).
+    -El peso de los archivos está indicado en bytes.
 
-    -Para finalizar, se debe ejecutar el script pasandole el parámetro -Detener
+    -Para finalizar, se debe ejecutar el script pasandole el parámetro -Detener.
+
+    -El peso real del directorio indicado solo se podrá obtener si se tienen los permisos
+     adecuados a todos los subdirectorios y archivos que contiene el directorio en cuestión.
          
     .Example
     ./tp2-ej5.ps1 -Procesos
+    220
+    ... 5 segundos ...
+    222
+    ... 5 segundos ...
+    219
+
+    .Example
     ./tp2-ej5.ps1 -Peso -Directorio "/home/user"
-    ./tp2-ej5.ps1 -Peso "/home/user"
+
+    34374515953
+    ... 5 segundos ...
+    34374147852
+    ... 5 segundos ...
+    34374515953
+
+    .Example
     ./tp2-ej5.ps1 -Detener
+
+    "El script se detuvo exitósamente."
     
 #>
 
@@ -57,7 +76,7 @@ Param (
         [Parameter(ParameterSetName="Detener")] [switch] $Detener
     )
 
-$timer = New-Object System.Timers.Timer -Property @{Interval = 5000}
+$timer = New-Object System.Timers.Timer -Property @{Interval = 10000}
 $existe = Test-Path $Directorio
 $global:ruta = $Directorio
 
@@ -142,6 +161,6 @@ else { #Sino fue ninguno de los parámetros permitidos, ni detener.
     Exit
 }
 
-<#NOTA: Las líneas de la 82 a 85, 102 a 117 y 123 a 126 son para darle formato a la salida, solo están
+<#NOTA: Las líneas de la 103 a 106, 123 a 138 y 144 a 147 son para darle formato a la salida, solo están
 comentadas para cumplir con el enunciado "La salida debe ser por pantalla y únicamente un número".
-Si se quitan los comentarios, la unidad de medida de los directorios se ajustará al peso de los mismos.#> 
+Si se quitan los comentarios, la unidad de medida de los directorios se ajustará al peso de los mismos.#>
