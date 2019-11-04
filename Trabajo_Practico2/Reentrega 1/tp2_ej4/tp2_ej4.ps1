@@ -23,7 +23,7 @@
 	El script es llamado indicando los directorios de origen y destino para realizar
 	la compresión o descompresión de los archivos
 	.Example
-	./ej4.ps1 -pathzip C:\user\docs -directorio C:\destino\docs.zip -comprimir
+	./ej4.ps1 -pathzip C:\destino\docs.zip -directorio C:\user\docs  -comprimir
 	./ej4.ps1 -pathzip C:\destino\docs.zip -directorio C:\user\docs -descomprimir
 	./ej4.ps1 -pathzip C:\destino\docs.zip -informar
 #>
@@ -55,8 +55,11 @@ if($descomprimir.IsPresent -and $informar.IsPresent){
 
 if($comprimir.IsPresent){
 	
-	#consulto si existe el directorio de destino
-	$valid_path = Test-Path $directorio;
+	#busco la ruta completa
+	$dest = Resolve-Path $directorio;
+
+	#consulto si es valida
+	$valid_path = Test-Path $dest;
 	if($valid_path -ne $true){
 		Write-Host "El directorio indicado no existe. Ultice la opcion Get-Help para ver la ayuda del script."
 		exit;
@@ -65,7 +68,7 @@ if($comprimir.IsPresent){
 	Add-Type -Assembly 'System.IO.Compression.FileSystem'
 	#[System.IO.Compression.ZipFile]::CreateFromDirectory($directorio,$pathzip)
 	$compresion = [System.IO.Compression.CompressionLevel]::Optimal 
-	[System.IO.Compression.ZipFile]::CreateFromDirectory($directorio,$pathzip,$compresion,$true)
+	[System.IO.Compression.ZipFile]::CreateFromDirectory($dest,$pathzip,$compresion,$true)
 	exit;
 }
 
