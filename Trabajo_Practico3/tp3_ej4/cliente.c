@@ -40,6 +40,10 @@ int main(int argc, char *argv[])
     }
     //BUSCA EL ESPACIO DE MEMORIA COMPARTIDA
     fd = shm_open("shm", O_RDWR, 0777);
+     if(fd < 0){
+	printf("Error - No pudo acceder al area de memoria compartida.\n");
+	exit(1); 
+	}
     mutex_0 = sem_open("mutex_0", O_RDWR);
     mutex_1 = sem_open("mutex_1", O_RDWR);
     mutex_2 = sem_open("mutex_2", O_RDWR);
