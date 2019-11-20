@@ -143,9 +143,11 @@ void ayuda(){
     printf("*Direccion IP: Direccion ip del servidor\n");
     printf("*Puerto: Puerto de comunicacion del servidor\n");
     printf("\nEjemplos:\n\n");
-    printf("* ./demo 192.168.1.2 7000\n");
+    printf("* ./ej5_cliente 192.168.1.2 7000\n");
     printf("*ID=979\n\n");
-    printf("* ./demo 192.168.2.5 8000\n");
-    printf("*QUIT\n");
+    printf("* ./ej5_cliente 192.168.2.5 8000\n");
+    printf("*QUIT\n\n");
+    printf("*./ej5_cliente hostname 6789\n");
+    printf("*MARCA=MAROLIO\n\n");
 }
 

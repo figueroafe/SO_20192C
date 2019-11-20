@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    if(argc < 2)
+    if(argc < 2 || argc > 3)
     {
         printf("La Cantidad de parámetros no es correcta. Utilice %s -help para ver la ayuda.\n", argv[0]);
         exit(3);
