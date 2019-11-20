@@ -1,0 +1,50 @@
+AYUDA PARA LA EJECUCION DEL SCRIPT
+----------------------------------
+
+1) Crear ejecutable:
+
+	a) En una terminal situarse en el directorio "./tp3_ej3".
+	b) Ejecutar comando "make" el cual generará el archivo binario "tp3_ej3".
+	c) Ejecutar con "./tp3_ej3" y los parámetros deseados.
+	d) Para borrar el archivo binario "tp3_ej3" se debe ejecutar el comando "make clean" (opcional).
+	
+2) Parámetros: 
+	
+	2.1) Para ejecutar el proceso demonio:
+		a) 1° Ruta y nombre del FIFO de entrada (donde se escriben las consultas). (*)
+		b) 2° Ruta y nombre del FIFO de salida (donde se escriben los resultados de las consultas). (*)
+		c) 3° Ruta y nombre del archivo de artículos que contiene los registros a consultar.
+		Ejemplo: ./tp3_ej3 "/tmp/FIFO de entrada" "/tmp/FIFO de salida" "/tmp/archivo de articulos.txt"(**)
+	
+
+    	2.2) Para detener el demonio:
+		a) 1° -detener
+		Ejemplo: ./tp3_ej3 -detener
+
+	2.3) Para consultar ayuda:
+		a) 1° -help
+		Ejemplo: ./tp3_ej3 -help
+        
+3) Modo de uso:
+	
+	a) Lanzar el proceso demonio como se indicó en el punto 2.1. Se podrá consultar con el comando "ps" el listado 
+	de procesos y se observará que uno de ellos tiene el nombre del script y los parámetros que usamos.
+	Ejemplo: ps -ef
+
+	b) Como el archivo FIFO que se genera en la salida es del tipo bloqueante, luego de ejecutar el proceso demonio, debemos
+	utilizar un comando como "cat" para poder ver el resultado de la consulta. Al hacerlo la consola se queda esperando que
+	se ingrese la consulta a través del FIFO de entrada.
+	Ejemplo: cat "/tmp/FIFO de salida"
+
+	c) Para realizar una consulta se debe enviar al archivo FIFO de entrada un string con el formato CAMPO=VALOR (***), es 
+	decir con el nombre del campo a filtrar, un signo igual y el valor. Se puede usar un comando como "echo" o un script.
+	Ejemplo: echo "PRODUCTO=HELADO" > "/tmp/FIFO de entrada"
+
+NOTAS: 
+(*) De no existir los archivos FIFOs serán creados.
+(**) El formato de estos parámetros es "/...ruta.../nombre del archivo".
+(***) La consulta debe enviarse en letras mayúsculas.
+
+
+
+
