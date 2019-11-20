@@ -1,0 +1,35 @@
+Instrucciones
+-------------
+
+1) Crear ejecutables cliente y servidor:
+    a) En una terminal situarse en el directorio "./Tp3_ej5"
+    b) Ejecutar comando "make" para generar los binarios.
+
+2) Iniciar servidor:
+    a) En una terminal ingresar al directorio "./Tp3_ej5"
+    b) Ejecutar ./server "Nombre del host o Direccion IP" "Puerto" en la terminal.
+
+3) Iniciar cliente (repetir para cada cliente): 
+    a) En una terminal ingresar al directorio "./Tp3_ej5".
+    b) Ejecutar "./cliente "Host del Server o su Direccion IP" "Puerto seleccionado en el Server".
+
+4) Detener servidor:
+    a) Una vez iniciado puede ejecutar ./server -detener para finalizar el servicio.
+
+5) Realizar Consultas:
+    a) Desde el cliente una vez ya iniciado podra ingresar las consultas con el formato "CAMPO=VALOR".
+    b) Si desea salir de la sesion envie "QUIT" en lugar de una consulta.
+
+
+Detalles de la configuración
+----------------------------
+El servidor esta diseñado para asociar todas sus interfaces de red al puerto seleccionado.
+Si no conoce su IP puede utilizar "127.0.0.1"; luego si conoce el nombre del equipo va a poder
+conectarse al servidor desde el cliente ingresando su nombre del host en lugar de su IP.
+En cuanto a los puertos, debe utilizar uno comprendido entre 0 y 65536. Recuerde que hay puertos
+que estan ocupados a servicios conocidos (21, 25, 80, 443, etc). Sepa que si selecciona un puerto
+que no esta disponible se le dara uno aleatorio. Para consultar su conexion activa, ejecute desde 
+la terminal "lsof -i -P -n" para visualizar su servidor activo que esta como demonio.
+Ademas puede ejecutar las ayudas que ofrecen los ejecutables desde el comando -help para mas
+detalles y ejemplos.
+
