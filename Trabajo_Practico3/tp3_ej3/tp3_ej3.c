@@ -1,3 +1,20 @@
+/************  inicio encabezado  **************
+# Nombre Script: "tp3_ej3.c"
+# Numero Trabajo Practico: 3
+# Numero Ejercicio: 3
+# Tipo: 1° Entrega
+# Integrantes:
+#
+#		Nombre y Apellido                           DNI
+#		---------------------                       ----------
+#       Francisco Figueroa	                        32.905.374
+#       Adrian Morel		                        34.437.202
+#       Sergio Salas                                32.090.753
+#       Fernando Sanchez	 		                36.822.171
+#       Sabrina Tejada			       	     		37.790.024
+***************  fin encabezado  ***************/
+
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -28,23 +45,19 @@ int main(int argc, char *argv[])
     char cadena[500]="\0";
     char *aux='\0';
     int pidDemonio = 0;
-    //char rutaFifoEntrada[500];
-    //char rutaFifoSalida[500];
     int contador=0;
-    char ruta1[500]="/tmp/ent";
-    char ruta2[500]="/tmp/sal";
     int fd1, fd2;
     FILE *fp1, *fp2, *fdaemon;
     pid_t pid, sid;
 
 /****************************** VALIDACIONES ***************************/
 
-    if(argc == 1){
-        printf("\nParámetros insuficientes, consulte ayuda con %s -help.\n\n", argv[0]);
+    if(argc == 1 || argc == 3){
+        printf("\nCantidad de parámetros incorrectos, consulte ayuda con %s -help.\n\n", argv[0]);
         return 1;
     }
 
-    if(argc > 3){
+    if(argc > 4){
         printf("\nDemasiados parámetros, consulte ayuda con %s -help.\n\n", argv[0]);
         return 1;
     }
@@ -56,18 +69,31 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        if(strcmp(argv[1], "-detener") == 0 && argc == 2){
+        if(strcmp(argv[1], "-detener") == 0){
             char fila[7];
-            fdaemon = fopen("demonio.txt","r");
+            fdaemon = fopen("/tmp/demonio.txt","r");
             fgets(fila, sizeof(fila), fdaemon);
             sscanf(fila,"%d", &pidDemonio);
             kill(pidDemonio,SIGINT);
             fclose(fdaemon);
+            printf("\nEl proceso demonio se detuvo correctamente.\n\n");
+            return 1;
+        }
+
+        else{
+            printf("\nParámetros incorrectos, consulte ayuda con %s -help.\n\n", argv[0]);
             return 1;
         }
     }
 
-    if(argc == 3){
+    if(argc == 4){
+
+        if( (strcmp(argv[1], argv[2]) == 0) ||
+            (strcmp(argv[1], argv[3]) == 0) ||
+            (strcmp(argv[2], argv[3]) == 0)){
+                printf("\nLas rutas de los archivos no pueden ser iguales.\n\n");
+                return 1;
+        }
 
         errno=0;
         if(mkfifo(argv[1], 0666) == -1){
@@ -90,45 +116,50 @@ int main(int argc, char *argv[])
         }
     }
 
-    else{
-        printf("\nLa cantidad de parámetros es incorrecta, consulte ayuda con %s -help.\n\n", argv[0]);
-        return 1;
-    }
 
 /****************************** DEMONIO ********************************/
 
-    /*
+    pid = fork();
+
     if (pid != 0){
-        return 1;
+        exit(1);
     }
 
     else{
-        fp1 = fopen("demonio.txt", "w");
+        fp1 = fopen("/tmp/demonio.txt", "w");
         fprintf(fp1,"%d",getpid());
         umask(0);
         sid = setsid();
 
         if(sid < 0){
-            perror("\nNo se pudo generar el demonio\n\n");
+            perror("\nNo se pudo generar el demonio.\n\n");
             exit(EXIT_FAILURE);
         }
 
         fclose(fp1);
 
+        fp2 = fopen(argv[3], "r");
+        if(fp2 == NULL){
+            printf("\nNo se encontró el archivo de artículos, revise la ubicación.\n\n");
+            return 1;
+        }
+
+        printf("\nEl proceso demonio fue iniciado correctamente.\n\n");
+
         chdir("/home");
         close(STDIN_FILENO);
         close(STDOUT_FILENO);
-        close(STDERR_FILENO);*/
+        close(STDERR_FILENO);
+
 
 /****************************** MANEJO DE ARCHIVOS ****************************/
 
         while(1){
-
             printf("\nEsperando consulta ...\n");
-            fd1 = open(ruta1, O_RDONLY);
+            fd1 = open(argv[1], O_RDONLY);
             read(fd1, consulta, sizeof(consulta));
 
-            fd2 = open(ruta2, O_WRONLY | O_NONBLOCK);
+            fd2 = open(argv[2], O_WRONLY | O_NONBLOCK);
 
             aux=strrchr(consulta, '=');
             if(aux == NULL){
@@ -146,12 +177,6 @@ int main(int argc, char *argv[])
             *aux = '\0';
 
             close(fd1);
-
-            fp2 = fopen("articulos.txt", "r");
-            if(fp2 == NULL){
-                printf("\nNo se encontró el archivo de artículos, revise la ubicación.\n");
-                return 1;
-            }
 
             while(fgets(linea, sizeof(linea), fp2)){
 
@@ -206,33 +231,37 @@ int main(int argc, char *argv[])
                 write(fd2, "\nNo se encontraron registros que coincidan con la búsqueda.\n\n", 100);
 
             close(fd2);
-            fclose(fp2);
+            rewind(fp2);
             contador=0;
         }
-    //}
-
+    }
+    fclose(fp2);
     return 0;
 }
 
 /****************************** FUNCIONES ******************************/
 
+
 void ayuda(){
 
-    printf("\n-------------------------------------------------------------------------------\n");
-    printf("--------------------------- Ayuda Ejercicio 3 ---------------------------------\n");
-    printf("-------------------------------------------------------------------------------\n");
+    printf("\n--------------------------------------------------------------------------------\n");
+    printf("--------------------------- Ayuda Ejercicio 3 ----------------------------------\n");
+    printf("--------------------------------------------------------------------------------\n");
     printf("\nDescripción\n");
-    printf("El demonio lee de un FIFO las consultas y devuelve por\n");
-    printf("otro FIFO los registros coincidentes que encuentre. Toma por\n");
-    printf("parámetro la ruta y nombre de los FIFO y los crea de ser necesario.\n");
+    printf("El proceso demonio lee de un FIFO las consultas y devuelve por\n");
+    printf("otro FIFO los registros coincidentes del archivo de articulos que\n");
+    printf("encuentre. Toma por parámetro la ruta y nombre de los FIFO (los crea\n");
+    printf("\nde ser necesario) y el archivo de artículos a evaluar.\n");
     printf("\nParámetros\n");
     printf("Origen: Ruta del FIFO donde se buscan las consultas realizadas (una a la vez).\n");
     printf("Destino: Ruta del FIFO donde se arrojan los resultados de las consultas.\n");
+    printf("Archivo: Ruta del archivo de artículos a evaluar.\n");
     printf("-detener: Detiene el proceso demonio.\n");
     printf("\nSintáxis\n");
-    printf("./tp3_ej3 [origen] [destino]\n");
+    printf("./tp3_ej3 [origen] [destino] [archivo]\n");
     printf("./tp3_ej3 -detener\n");
     printf("\nEjemplos\n");
-    printf("./tp3_ej3 /tmp/consultas /tmp/resultados\n");
+    printf("./tp3_ej3 \"/tmp/consultas\" \"/tmp/resultados\" \"/tmp/archivos.txt\"\n");
     printf("./tp3_ej3 -detener\n\n");
+
 }
