@@ -9,7 +9,14 @@
 pid_t pid, pid2, pid3, pid4, pid5, pid6, pid7, pid8, pid9, pid10;
 
 int main(){
-    pid = fork();
+
+    crearHijos();
+    getchar();
+    printf("Proceso Finalizado!\n"); 
+}
+
+void crearHijos(){
+        pid = fork();
     if(pid == 0){ //soy hijo
         printf ("PID: %d PPID: %d Parentesco-Tipo: [hijo] - [normal]\n", getpid(), getppid());
         pid5 = fork(); //creo otro hijo
@@ -33,8 +40,6 @@ int main(){
                 pid7 = fork(); //creo bisnieto
                 if(pid7 == 0){// soy bisnieto
                     sleep(2);
-                    umask(0);
-                    pid_t sed = setsid();
                     printf ("PID: %d PPID: %d Parentesco-Tipo: [bisnieto] - [demonio]\n", getpid(), getppid());
                 }
                 else{ //soy nieto
@@ -42,6 +47,7 @@ int main(){
                     if(pid8 == 0){ //soy bisnieto
                     sleep(2);
                     printf ("PID: %d PPID: %d Parentesco-Tipo: [bisnieto] - [demonio]\n", getpid(), getppid());
+                    crearDemonio();
                     }
                     else //soy nieto
                     exit(0);
@@ -66,7 +72,7 @@ int main(){
                 if(pid4 == 0){//soy bisnieto
                     sleep(2);
                     printf ("PID: %d PPID: %d Parentesco-Tipo: [bisnieto] - [demonio]\n", getpid(), getppid());
-
+                    crearDemonio();
                 }
                 else
                     exit(0);
@@ -80,8 +86,10 @@ int main(){
              //soy padre
              wait(NULL);
              wait(NULL);
-             getchar();
         }
     }
-    //https://www.busindre.com/crear_matar_y_entender_los_procesos_zombie
+}
+
+void crearDemonio(){
+ while(1){}   
 }
