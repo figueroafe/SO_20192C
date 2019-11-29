@@ -7,6 +7,8 @@
 #include <sys/wait.h>
 
 pid_t pid, pid2, pid3, pid4, pid5, pid6, pid7, pid8, pid9, pid10;
+void crearHijos();
+void crearDemonio();
 
 int main(){
 
