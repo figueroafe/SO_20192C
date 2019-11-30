@@ -91,6 +91,9 @@ int main(int argc, char *argv[])
 		sem_close(mutex_0);
 	    	sem_close(mutex_1);
 	    	sem_close(mutex_2);
+		sem_unlink("mutex_0");
+		sem_unlink("mutex_1");	
+		sem_unlink("mutex_2");
 	    	munmap(buffer, 65536);
 	    	shm_unlink("shm");
 		return 1;
@@ -169,6 +172,9 @@ int main(int argc, char *argv[])
     sem_close(mutex_0);
     sem_close(mutex_1);
     sem_close(mutex_2);
+    sem_unlink("mutex_0");
+    sem_unlink("mutex_1");	
+    sem_unlink("mutex_2");
     munmap(buffer, 65536);
     shm_unlink("shm");
     return(1);
@@ -198,7 +204,10 @@ void eliminar_segmento(){
 
 	sem_close(mutex_0);
 	sem_close(mutex_1);
-	sem_close(mutex_2);	
+	sem_close(mutex_2);
+	sem_unlink("mutex_0");
+	sem_unlink("mutex_1");	
+	sem_unlink("mutex_2");	
 	munmap(buffer, 65536);
 	shm_unlink("shm");
 	close(fd);

@@ -106,12 +106,11 @@ void ayuda(){
 }
 
 void eliminar_segmento(){
-
+	printf("Señal capturada\n");
 	sem_close(mutex_0);
 	sem_close(mutex_1);
 	sem_close(mutex_2);	
 	munmap(buffer, 65536);
-	shm_unlink("shm");
 	close(fd);
 	exit(1);
 }
