@@ -1,0 +1,23 @@
+Instrucciones
+-------------
+
+1) Crear ejecutables cliente y servidor:
+    a) En una terminal situarse en el directorio "./Tp3_ej4"
+    b) Ejecutar comando "make" para generar los binarios.
+
+2) Crear espacio de memoria compartida:
+    a) En una terminal ingresar al directorio "./Tp3_ej4"
+    b) Ejecutar ./ej4_server "ruta del fichero".
+    c) Si el fichero no existe NO se creara el espacio de memoria compartida.
+    d) Una vez creado se quedará esperando hasta 5 consultas o una consulta erronea (mal formato).
+
+3) Uso del espacio de memoria compartida para consultas (repetir para cada consumidor): 
+    a) En una terminal ingresar al directorio "./Tp3_ej4".
+    b) Ejecutar "./ej4_cliente "CAMPO=VALOR".
+
+
+4) Eliminar espacio de memoria compartida:
+    a) Al hacer 5 consultas.
+    b) Al ingresar una consulta erronea.
+    c) Al enviar una señal SIGINT o SIGTERM al proceso servidor.
+
